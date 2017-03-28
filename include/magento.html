@@ -11,6 +11,10 @@
             <li role="presentation"><a href="#permisson" aria-controls="permisson" role="tab" data-toggle="tab">Permisson Apache</a></li>
             <li role="presentation"><a href="#sdata" aria-controls="sdata" role="tab" data-toggle="tab">Simple Data</a></li>
             <li role="presentation"><a href="#smodule" aria-controls="smodule" role="tab" data-toggle="tab">Simple Module</a></li>
+            <li role="presentation"><a href="#menum2" aria-controls="menum2" role="tab" data-toggle="tab">Menu</a></li>
+            <li role="presentation"><a href="#deflogo" aria-controls="deflogo" role="tab" data-toggle="tab">Change Default Logo for Custom Module</a></li>
+            <li role="presentation"><a href="#acl" aria-controls="acl" role="tab" data-toggle="tab">ACL</a></li>
+            <li role="presentation"><a href="#admcon" aria-controls="admcon" role="tab" data-toggle="tab">Create Router ADMIN AND CONTROLLER</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -285,6 +289,198 @@ etc/page_configuration.xsd">
                 </p>
                 <hr>
             </div>
+            <div role="tabpanel" class="tab-pane" id="menum2">
+                <span class="pre-title">Create menu in ADM:</span>
+                <br>
+                <p class="mid-title">/etc/adminhtml/menu.xml</p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <i><</i>menu>
+            <i><</i>add id="Weblips_Logo::first_level" <i><</i>!-- модуль :: уникальное id -->
+                title="BookClub" <i><</i>!-- title :: которое будет выводиться -->
+                translate="title" <i><</i>!-- перевод title :: в i18n -->
+                module="Weblips_Logo" <i><</i>!-- отношение к модулю -->
+                sortOrder="10" <i><</i>!-- сортировка 9999 - последний (10) - первый -->
+                resource="Weblips_Logo::first_level" /> <i><</i>!-- redirect на страницу при клике -->
+ 
+            <i><</i>add id="Weblips_Logo::second_level"
+                title="Level1"
+                translate="title"
+                module="Weblips_Logo"
+                sortOrder="0"
+                action="menuitem/index/index"   <i><</i>!-- ссылка на контроллер bookclub<i><</i>router id>/folder<i><</i>controller folder>/file controller<i><</i>Not need if is Index.php> -->
+                parent="Weblips_Logo::first_level" <i><</i>!-- зависимость от радителя-->
+                resource="Weblips_Logo::second_level" />
+    <i><</i>/menu>
+<i><</i>/config>
+                        
+                    </code>
+                </pre>
+                <hr>
+                <p class="mid-title">CLEANE CODE</p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <i><</i>menu>
+            <i><</i>add id="Weblips_Logo::first_level" 
+                title="BookClub" 
+                translate="title" 
+                module="Weblips_Logo" 
+                sortOrder="10" 
+                resource="Weblips_Logo::first_level" /> 
+            <i><</i>add id="Weblips_Logo::second_level"
+                title="Level1"
+                translate="title"
+                module="Weblips_Logo"
+                sortOrder="0"
+                action="menuitem/index/index"  
+                parent="Weblips_Logo::first_level" 
+                resource="Weblips_Logo::second_level" />
+    <i><</i>/menu>
+<i><</i>/config>
+                        
+                    </code>
+                </pre>
+            </div>
+                <hr>
+            <div role="tabpanel" class="tab-pane" id="deflogo">
+                <p class="mid-title">add images(svg) to view/adminhtml/web/images/your.svg</p>
+                <p class="mid-title">view/adminhtml/web/css/base.css add :</p>
+                <pre>
+                    <code>
+.admin__menu #menu-weblips-logo-first-level > a:before  {
+    opacity: 0.65;
+    content: '';
+    font-size: 2.4rem;
+    display: block;
+    position: relative;
+    top: -0.3rem;
+    width: 28px;
+    height: 23px;
+    background: url(../images/duck.png);
+    background-size: 28px 23px;
+    margin: 0 auto;
+}
+
+.admin__menu #menu-weblips-logo-first-level:hover > a:before {opacity: 1;}                       
+                    </code>
+                </pre>
+                <p class="mid-title">add : view/adminhtml/layout/default.xml</p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <i><</i>head>
+        <i><</i>css src="Weblips_Core::css/base.css"/>
+    <i><</i>/head>
+<i><</i>/page>                     
+                    </code>
+                </pre>
+                <hr>
+            </div>
+                
+            <div role="tabpanel" class="tab-pane" id="acl">
+                <p class="mid-title">/etc/acl.xml</p>
+                <p>в acl добавляем все menu и подменю т.к по умолчанию Controller is _allow</p>
+                <p>структура лесница : -magento_backend->first level->two level> </p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <i><</i>acl>
+        <i><</i>resources>
+            <i><</i>resource id="Magento_Backend::admin">
+                <i><</i>resource id="Weblips_Logo::first_level" title="BookClub" sortOrder="10" >
+                    <i><</i>resource id="Weblips_Logo::second_level" title="edit menu admin" sortOrder="0">
+                        <i><</i>resource id="Weblips_Logo::three_level" title="Level3" sortOrder="0" />
+                    <i><</i>/resource>
+                <i><</i>/resource>
+            <i><</i>/resource>
+        <i><</i>/resources>
+    <i><</i>/acl>
+<i><</i>/config>
+                    </code>
+                </pre>
+                <p> Add to Controller how apperate link </p>
+                <pre>
+                    <code>
+protected function _isAllowed()
+    {
+        return true;
+    }
+                    </code>
+                </pre>
+                <p> OR </p>
+                <pre>
+                    <code>
+protected function _isAllowed(){
+    return $this->_authorization->isAllowed('Weblips_Core::menu'); // resource
+}
+                    </code>
+                </pre>
+                <hr>
+            </div>    
+        <div role="tabpanel" class="tab-pane" id="admcon">
+                <p class="mid-title">etc/adminhtml/routes.xml</p>
+                <p>http://yoursite.com/index.php/[route_name]/[controller_name]/[action_name]   // frontend router</p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+   <i><</i>router id="admin">
+       <i><</i>route id="bookclub" frontName="bookclub">
+           <i><</i>module name="Weblips_Logo" />
+       <i><</i>/route>
+   <i><</i>/router>
+<i><</i>/config>
+                    </code>
+                </pre>
+                <p class="w-success"> link : http://SITE.UA/admin/bookclub/index/index </p>
+                <p>OR</p>
+                <p class="w-success"> http://site.ua/admin/#router_id#/#folder controller#/#action file.php if is not index# </p>
+                <h2>--- CONTROLLER ---</h2>
+                <p class="mid-title">create Controller in Controller/Adminhtml/Index/Index.php </p>
+                <pre>
+                    <code>
+<i><</i>?php
+ 
+namespace Weblips\Core\Controller\Adminhtml\Index;
+ 
+use Magento\Framework\App\Action\Context;
+ 
+class Index extends \Magento\Framework\App\Action\Action
+{
+    protected $_resultPageFactory;
+ 
+    public function __construct(Context $context, \Magento\Framework\View\Result\PageFactory $resultPageFactory)
+    {
+        $this->_resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+ 
+    public function execute()
+    {
+        $resultPage = $this->_resultPageFactory->create();
+        return $resultPage;
+    }
+    
+    /**
+     * Check for is allowed
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Weblips_Core::menu'); // or return true;
+    }
+}
+                    </code>
+                </pre>
+                
+            </div>    
         </div>
     </div>
 </div>
