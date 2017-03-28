@@ -84,6 +84,7 @@
                             alert('NOT FOUND: ' +link.toLowerCase()+'.html' );
                         },
                         success: function(data){
+                            $('.content').empty();
                             $('.content').append(data);
                         }
                     });
