@@ -1,0 +1,334 @@
+http://otdel-devsite.ru/
+
+++++++++++++++++++++ LARAVEL ++++++++++++++++++++++++++++
+----------------- Install Laravel -----------------------
+
+composer create-project laravel/laravel --prefer-dist
+
+nano sites-enabled/000-default.conf
+
+add:
+
+/var/www/laravel/public
+
+<Directory /var/www/laravel/public>
+AllowOverride All
+</Directory>
+
+//устанавливаем mod-rewrite 
+ln -s /etc/apache2/mods-avalible/rewrite.load /etc/apache2/mods-enabled/rewrite.load
+
+--------------------------- Подключение к БД -----------------------------
+
+config/database.php
+
+add param for connect to db (mysql)
+
+-------------------------- ROUTER LARAVEL ----------------------------
+App/Http/Router.php
+
+cодержится единственный маршрут
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get — это функция которая обрабатывает входящий GET запрос
+‘/’ — это шаблон которому соответствует запрос
+
+Маршрут мы можем задать любой. Например:
+
+Route::get('/secretzone/dashbord', function() {
+echo "Welcome to Secret Zone";
+});
+------------------------- маршруты с переменными ----------------------
+
+//router for items and variables in get
+Route::get('/hello/{name}', function($name) {
+echo "Hello ".$name;
+});
+------------
+// with 2 variables
+Route::get('/hello/{name}/{age}', function($name, $age) {
+echo "Hello ".$name.".Your age ".$age;
+}); 
+-----------
+--------------------------маршруты с префиксами (GROOPS ROUTERS)--------------------------
+Нужны одинаковый путь ПР:
+http://site.ru/zone/show
+http://site.ru/zone/edit
+http://site.ru/zone/close
+Т.е. везде присутствует /zone/. Что бы не писать десять раз zone используем prefix и group
+
+Route::group(['prefix' => 'zone'], function()
+{
+  Route::get('show', function($account_id)
+  {
+    //
+  });
+Route::get('edit', function()
+  {
+    //
+  });
+....
+});
+-----------------------------------------------------------------------------------------------
+http://site.ru/article/1 
+
+Route::get('article/{id}', function($id)
+{
+  echo $id;
+})
+->where('id', '[0-9]+');
+
+---------------------------- Посредники  (middleware) -------------------------------------------
+app/Http/Middleware
+
+это такая штука, которая обрабатывает запрос перед тем, как передать выполнение в функцию. 
+Посредник  анализирует входящие параметры и возвращает либо true (истина) и тогда выполнение передаются далее или false (ложь) 
+и тогда выполняется, то что заложено в посреднике. Авторизация — это отличный пример. 
+Например мы хотим сделать админку на сайте, доступ в которую ограничен паролем. 
+Т.е. перед тем, как открыть админку, нужно проверить, а авторизован ли посетитель?
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/adminzone/dashboard', function ()    {
+        // Здесь что-нибудь делаем
+    });
+});
+
+Посредник Auth  - из коробки
+			csrf - включен по умолчанию Пр: 
+			добавляет поле _token и потом проверяет его с заданным - сгенерированным
+			защита от Межсайтовая подделка запроса
+
+<form action="/article/record" method="POST">
+<textarea>Статья</textarea>
+<input type="hidden" name="_token" value="sdfwerTEweruyTrergdmngFRewWQehoI">
+<input type="submit" value="Сохранить">
+-------------------------------------------  VIEW Виды и шаблоны ------------------------------------------------
+Вид — это непосредственно страница, которая показывается посетителю
+Шаблон - это то, что упростит построение вашей страницы.
+
+Route::get('/', function()
+{
+     return view( "mainpage");
+});
+
+mainpage — это и есть наша страница. 
+Все файлы видов хранятся в папке : resources/views/
+
+сождадим файл вида : resources/views/mainpage.php
+внесем в него html - рез. готовая статическая страница
+
+-------------- Добавим динамики в вид --------------------
+передача переменных в Вид
+
+Route::get('/date', function()
+{
+     $date=date("m.d.y");
+     return view('date',['date'=>$date]);
+});
+-------
+Как это работает? Вот этой строчкой
+return view('date',['date'=>$date]);
+мы назначили переменой date значение равное сегодняшней дате и передали в вид date.php. 
+Переменную можно обозвать, как угодно. Например так:
+return view('date',['today'=>$date]);
+
+Тогда уже в виде нужно будет писать так:
+<h1>Сегодня <?php echo $today;?></h1>
+
+В переменной может содержаться что угодно:  объект, массив, цифра, строка.
+ И переменных может быть несколько. Достаточно добавить их в массив
+return view('date',['today'=>$date,'tomorrow'=$date2]);
+
+Кстати, файлы видом можно размещать и в подпапках. Например, мы хотим упорядочить наши страницы с видами
+resources/views/site/mainpage.php
+resources/views/site/article.php
+resources/views/admin/dashboard.php
+
+для того, что бы добраться до этих файлов, в маршруте нужно писать так
+...
+return view('site.mainpage');
+----------------- ЕЩЕ ОДИН СПОСОБ 	ПЕРЕДАЧИ ПЕРЕМЕННЫХ ВО VIEW :
+Route::get('/date', function()
+{
+     $date=date("m.d.y");
+     return view('date')->with('date',$date);
+});
+
+ЭТО с использыванием HELPERA
+
+------------------- Шаблонизатор Blade ----------------------------------------------------------------------------
+
+Laravel поставляется вместе с замечательным шаблонизатором Blade.
+Для того что бы применить все возможности Blade, переименуем файл date.php в файл date.blade.php.
+ При этом в маршрутах ничего менять не нужно, все остается также
+ замена в шаблоне:
+   <h1>{{ $helper }}</h1>
+   
+{{ $переменная }}    При этом переменная будет экранирована. Т.е. все спец символы будет заменены на коды этих символов
+{{!! $переменная !!}} сырая переменная
+
+При разработке сайта, неизбежно, будут куски шаблона, который есть во всех страницах сайта 
+— заголовок (header), подвал (footer), боковая панель (sidebar), ссылки на стили, на скрипты javascript и пр.
+  Для того что бы не прописывать все эти куски в каждом файле вида, используется наследование.
+  
+С помощью директив @yield() мы определили секции шаблона, которые можно будет 
+
+@extends('layouts.main')
+@section('header')
+
+<h1>Название сайта</h1>
+
+@endsection
+
+@section('content')
+
+Приветствую вас на моем крутом блоге
+
+@endsection
+
+@section('footer')
+
+Copyright(c)2015
+
+@endsection
+------------------------------------------------------------------
+<html>
+<head>
+<meta charset='utf-8'/>
+<title>Мой сайт</title>
+</head>
+<body>
+<div id="header">
+     <h1> @yield('header')</h1>
+</div>
+<div id="content">
+      @yield('content')
+</div>
+<div id="footer">
+      @yield('footer')
+</div>
+</body>
+</html>
+-------------------------------- стили CSS ------------------------------
+храняться в папке public/
+
+public/style.css
+
+подключение стилей к шаблону с помощью хелпера
+<link rel="stylesheet" href="{{asset('css/style.css')}}" />
+
+по аналогии js и каринки
+подключаем его в layout
+
+---------------------------- Условия и циклы в Blade --------------------
+@extends('layouts.main')
+@section('header')
+     <h1>Название сайта</h1>
+@endsection
+@section('content')
+<ul>
+@foreach($names as $name)
+     <li>{{$name}}</li>
+@endforeach
+</ul>
+@endsection
+@section('footer')
+     Copyright(c)2016
+@endsection
+
+---- for 
+<ul>
+@for($x=0; $x<10; $x++)
+     <li>{{$x}}</li>
+@endfor
+</ul>
+
+--- if
+
+@if(isset($x))
+     {{$x}}
+@endif
+
+---------------------------- Контролеры -----------------------------------
+
+ нем обрабатывается логика вашего сайта. 
+ Именно он принимает решение, что делать с запросами посетителей, что отдавать, а что запрещать.
+ app/Http/Controllers
+ 
+ Controller.php - базовый контроллер
+ 
+ <?php
+namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
+
+class MyController extends Controller
+{
+.........
+}
+
+--------------
+Route::get('/', 'MyController@index');
+Route::controller('article','ArticleController');
+--------------
+
+<?php
+namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+class MyController extends Controller
+{
+// маршрут соответствует site.ru/article
+     function getIndex()
+          {
+               $hello="Hello world!!";
+               return view('mainpage',['hello'=>$hello]);
+          }
+//маршрут соответствует site.ru/article/show
+     function getShow()
+     {
+          $article='Моя статья';
+          return view('article.show',['article'=>$article]);
+     }
+// это POST запрос по адресу site.ru/article/save
+     function postSave(Request $request)
+     {
+          //здесь сохраняем статью
+     }
+}
+
+-----------
+
+function postSave(Request $request)
+{
+     $data=$request->input('var_from_form');
+....
+}
+var_from_form — это имя поля в форме
+<input type="text" name="var_from_form"/>
+
+Кстати, помните про посредников (middleware)? Я писал о них. Так вот, применить посредника можно прям в контролере. Для этого в конструкторе класса необходимо вызвать посредника.
+...
+class MyController extends Controller
+{
+   function __construct()
+   {
+        $this->middleware('auth');
+        //Или назначить посредника для конкретных методов getIndex и getPost
+        $this->middleware('auth',['only'=>['getIndex','getPost']]);
+        
+   }
+...
+у вас есть класс Article, который отвечает за вывод статей (getArticle),
+ обновление статей (postUpdate), сохранение статей (postCreate). 
+ Метод getArticle должен быть доступен всем, он отображает статьи на сайте, 
+ а вот обновление и сохранение статей должно быть разрешено только администратору.
+ Вот для этих методов (postUpdate, postCreate) нужно применить посредника Auth.
+ 
+ -------------------- База данных ---------------------------------
+ Модель — это отдельный класс, который предоставляет инструменты для работы с базой данных. 
+ config/database.php
+ 
+Храняться модели в папке app/
+

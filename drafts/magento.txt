@@ -1,0 +1,372 @@
+-- create SImple module ---
+
+1. step Create Folders
+    app/code/Weblips/Test
+2. registration module
+    etc/module.xml
+	-----------------------------------------------------------------------------------------------
+	<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd"> 
+      <module name="Weblips_Test" setup_version="0.0.1"/> 
+</config>
+
+	-----------------------------------------------------------------------------------------------
+	where :
+			name="Weblips_Test" - your`s Namespase of module
+			setup_version="0.0.1" - yor`s version for update and links Setup
+3. Create you registration:
+     registration.php 
+	 ----------------------------------------------------------------------------------------------
+	 
+	 <?php 
+\Magento\Framework\Component\ComponentRegistrar::register( 
+    \Magento\Framework\Component\ComponentRegistrar::MODULE, 
+    'Weblips_Test', 
+    __DIR__ 
+); 
+	 
+	 ----------------------------------------------------------------------------------------------
+	 where 'Weblips_Test' - is you module name in systems (and yor`s namespace)
+	 
+4. (IF YOU NEED) composer.json for update module
+	composer.json
+	-----------------------------------------------------------------------------------------------
+	{
+    "name": "weblips/test",
+    "description": "N/A",
+    "require": {
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "magento/module-catalog-rule": "100.2.*", // зависимости
+        "magento/module-sample-data": "100.2.*"
+    },
+    "type": "magento2-module", // указывает что это модуль
+    "version": "100.2.0-dev", // версия согласно установки из etc/module.xml
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Weblips\\Test\\": "" //namespace
+        }
+    }
+}
+	-----------------------------------------------------------------------------------------------
+5. Create routing:
+   etc/frontend/routes.xml   // for frontend/routes
+   etc/adminhtml/routes.xml   // for backend
+   
+   -------------------------------------------------------------------------------------------------
+   <?xml version="1.0"?> 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd"> 
+    <router id="standard"> 
+        <route id="example" frontName="example"> 
+            <module name="Weblips_Test" /> 
+        </route> 
+    </router> 
+</config>
+
+------------------------------------------------------------------------------------------------------
+	where: router id="standard" - default router
+		   route id="example" frontName="example" // unicum  http://site.com/example - for frontend/routes
+6. Create Controller
+   Controller/Index/Index.php  or Controller/Index.php // if you need open only this file http://site.com/example/index.php
+   Controller/Adminhtml/Index.php - for Admin panel
+   
+------------------------------------------------------------------------------------------------------
+<?php 
+namespace Weblips\Test\Controller\Index;
+ 
+class Index extends \Magento\Framework\App\Action\Action
+{
+    /** @var \Magento\Framework\View\Result\PageFactory  */
+    protected $resultPageFactory;
+
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+    /**
+     * Load the page defined in view/frontend/layout/example_index_index.xml
+     *
+     * @return \Magento\Framework\View\Result\Page
+     */
+    public function execute()
+    {
+        return $this->resultPageFactory->create();
+    }
+}
+
+------------------------------------------------------------------------------------------------------
+Where: 
+
+7. Create view/
+    view/adminhtml/layout/layouts.xml             // it`s default layout (if not exists router will be use this default layout)
+    view/frontend/layout/example_index_index.xml // default path for layout and routing
+	view/frontend/templates/index.phtml          // this`s template use layout how block;
+	view/adminhtml/
+	
+	-------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" 
+xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/
+etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" template="Weblips_Test::index.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" template="Weblips_Test::index2.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
+
+
+=========================================
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="1column"/>
+    <referenceContainer name="columns">
+        <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+            <container name="sidebar.main" as="sidebar_main" label="Sidebar Main"/>
+        </container>
+        <container name="div.sidebar.additional" htmlTag="div" htmlClass="sidebar sidebar-additional" after="div.sidebar.main">
+            <container name="sidebar.additional" as="sidebar_additional" label="Sidebar Additional"/>
+        </container>
+    </referenceContainer>
+</layout>
+	-------------------------------------------------------------------------------------
+	where: layout="2columns-left" ( 1column 2columns-left 2columns-right 3columns )
+	configuration tags for layout:
+	### ROOT PAGE Element
+		<html>
+		<head>
+		<body>
+		<update>
+	### Remove ### удаление со страницы
+	<head>
+        <!-- Remove local resources -->
+        <remove src="css/styles-m.css" />
+        <remove src="my-js.js"/>
+        <remove src="Magento_Catalog::js/compare.js" />
+								
+	<!-- Remove external resources -->
+        <remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+        <remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"/>
+        <remove src="http://fonts.googleapis.com/css?family=Montserrat" /> 
+   </head>
+   ### Riferens container
+   <referenceContainer name="footer">
+   <referenceContainer name="content">
+   
+ ----------------------------- MENU Backend  ---------------------------------
+ /etc/adminhtml/menu.xml
+ 
+ ----------
+ 
+ <?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+            <add id="Weblips_Logo::first_level" <!-- модуль :: уникальное id -->
+                title="BookClub" <!-- title :: которое будет выводиться -->
+                translate="title" <!-- перевод title :: в i18n -->
+                module="Weblips_Logo" <!-- отношение к модулю -->
+                sortOrder="10" <!-- сортировка 9999 - последний (10) - первый -->
+                resource="Weblips_Logo::first_level" /> <!-- redirect на страницу при клике -->
+ 
+            <add id="Weblips_Logo::second_level"
+                title="Level1"
+                translate="title"
+                module="Weblips_Logo"
+                sortOrder="0"
+                action="menuitem/index/index"   <!-- ссылка на контроллер bookclub<router id>/folder<controller folder>/file controller<Not need if is Index.php> -->
+                parent="Weblips_Logo::first_level" <!-- зависимость от радителя-->
+                resource="Weblips_Logo::second_level" />
+    </menu>
+</config>
+
+---------
+############################## Change Default Icon for custom modules ########################################
+add images(svg) to view/adminhtml/web/images/your.svg
+					view/adminhtml/web/css/base.css add :
+-------
+.admin__menu #menu-weblips-logo-first-level > a:before  {
+	opacity: 0.65;
+	content: '';
+    font-size: 2.4rem;
+    display: block;
+    position: relative;
+    top: -0.3rem;
+    width: 28px;
+    height: 23px;
+    background: url(../images/duck.png);
+    background-size: 28px 23px;
+    margin: 0 auto;
+}
+
+.admin__menu #menu-weblips-logo-first-level:hover > a:before {opacity: 1;}
+-------
+add : view/adminhtml/layout/default.xml
+---
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Weblips_Core::css/base.css"/>
+    </head>
+</page>
+
+############################# Create ACL (Access control list)  ##############################################
+/etc/acl.xml
+в acl добавляем все menu и подменю т.к по умолчанию Controller is _allow
+структура лесница : <magento_backend>
+									<first level>
+													<two level>
+
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Weblips_Logo::first_level" title="BookClub" sortOrder="10" >
+                    <resource id="Weblips_Logo::second_level" title="edit menu admin" sortOrder="0">
+                        <resource id="Weblips_Logo::three_level" title="Level3" sortOrder="0" />
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
+
+--- Add to Controller how apperate link
+
+ protected function _isAllowed()
+    {
+        return true;
+    }
+	
+	OR
+	
+protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Weblips_Core::menu'); // resource
+    }
+
+----------------------------
+
+########################## Create Router ADMIN AND CONTROLLER ###############################################################
+etc/adminhtml/routes.xml
+   http://yoursite.com/index.php/[route_name]/[controller_name]/[action_name]   // frontend router
+---------------------------
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+   <router id="admin">
+       <route id="bookclub" frontName="bookclub">
+           <module name="Weblips_Logo" />
+       </route>
+   </router>
+</config>
+
+--------------------------
+link : http://SITE.UA/admin/bookclub/index/index
+
+OR
+
+http://site.ua/admin/<router_id>/<folder controller>/<action file.php if is not index>
+
+------------------------- CONTROLLER -----------
+--- create Controller in Controller/Adminhtml/Index/Index.php 
+<?php
+ 
+namespace Weblips\Core\Controller\Adminhtml\Index;
+ 
+use Magento\Framework\App\Action\Context;
+ 
+class Index extends \Magento\Framework\App\Action\Action
+{
+    protected $_resultPageFactory;
+ 
+    public function __construct(Context $context, \Magento\Framework\View\Result\PageFactory $resultPageFactory)
+    {
+        $this->_resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+ 
+    public function execute()
+    {
+        $resultPage = $this->_resultPageFactory->create();
+        return $resultPage;
+    }
+    
+    /**
+     * Check for is allowed
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Weblips_Core::menu'); // or return true;
+    }
+}
+
+######################################## Create LAYOUT #########################################################
+
+- макет(layout) подтягивается при обращеннии к контроллеру
+- т.е есть ссылка: <router_id>_<controller folder>_<action_controller>.xml
+- default.xml - это дефолтный макет для отображения
+Виды макетов:
+             - admin-2columns-left
+			 - admin-1column
+
+Для отображения default style(menu, copiright, content = null) ::: <update handle="styles" />
+----
+
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles" />
+    <body>
+    </body>
+</page>
+
+----
+
+#### Подключаем BLock 
+   
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+  @@@@@@@@@@@@@@@@@@@@@@@@ THEMS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+app/design/frontend/Singree/walkbeyond/
+├── web/
+│ ├── css/
+│ │ ├── source/ 
+│ ├── fonts/
+│ ├── images/
+│ ├── js/
+
+############################### WARNING #########################################
+Exception Reflactation Class not exists Weblips/Core/...
+ -- delete in database Weblips/Core in table "eav attribute"
+
+  
+	
