@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta charset="UTF8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <!--<link rel="icon" href="../../favicon.ico">-->
+
+        <title>Weblips</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="css/styles-highlight/agate.css" rel="stylesheet" type="text/css"/>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="js/highlight.pack.js" type="text/javascript"></script>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <section class="header">
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">WebLips</a>
+                    </div>
+                    <ul class="nav navbar-nav routing">
+                        <li id="home" class="active"><a href="#">Home</a></li>
+                        <li><a href="#">pattern</a></li>
+                        <li><a href="#">PHP</a></li>
+                        <li><a href="#">Magento</a></li>
+                        <li><a href="#">UML</a></li>
+                        <li><a href="#">SPHINX</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Зарегаться</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Вход</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </section>
+        <section class="content"> 
+        </section>
+        <section class="footer center-block footer-inverse">
+            <div class="copyright">
+                <!-- Weblips &copy; -->
+            </div>
+        </section>
+        <style>
+            .content-page{ padding-left: 50px; padding-right: 50px;font-size: 18px }
+            .footer{position: absolute; bottom: 0px }
+            .pre-title{font-size: 15px; font-weight: bold; }
+            .w-warning{background: yellow}
+            .w-success{background: #255625}
+            figure>img{
+                display: block;
+                margin: 0 auto;}
+            hr {
+                -moz-border-bottom-colors: none;
+                -moz-border-image: none;
+                -moz-border-left-colors: none;
+                -moz-border-right-colors: none;
+                -moz-border-top-colors: none;
+                border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+                border-style: solid none;
+                border-width: 1px 0;
+                margin: 18px 0;             
+            }
+            .mid-title{font-size: 14px; color: red}
+        </style>
+        <script>
+            $(document).on('click','.routing a', function(){
+                var link = ($(this).html()) ? $(this).html() : false;
+                $.ajax({
+                        url: 'include/'+link.toLowerCase()+'.html',
+                        error: function(){
+                            alert('NOT FOUND: ' +link.toLowerCase()+'.html' );
+                        },
+                        success: function(data){
+                            $('.content').append(data);
+                        }
+                    });
+                    return false;
+                });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,186 @@
+<div>
+    <h3><b>Magento2:</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#install" aria-controls="install" role="tab" data-toggle="tab">Install</a></li>
+            <li role="presentation"><a href="#localization" aria-controls="localization" role="tab" data-toggle="tab">Localization</a></li>
+            <li role="presentation"><a href="#permisson" aria-controls="permisson" role="tab" data-toggle="tab">Permisson Apache</a></li>
+            <li role="presentation"><a href="#sdata" aria-controls="sdata" role="tab" data-toggle="tab">Simple Data</a></li>
+            <li role="presentation"><a href="#smodule" aria-controls="smodule" role="tab" data-toggle="tab">Simple Module</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="install">
+                <span class="pre-title">Install magento:</span>
+                <br>
+                <code>
+                    git clone https://github.com/weblips/magento2.git .
+                    <br>
+                    composer install
+                </code>
+                <br>
+                <span class="pre-title">Install with CLI:</span>
+                <br>
+                <code>
+                    php bin/magento setup:install 
+                    --base-url="http://yoururl.com/" 
+                    --db-host="localhost" 
+                    --db-name="dbname" 
+                    --db-user="dbuser" 
+                    --db-password="dbpass" 
+                    --admin-firstname="admin" 
+                    --admin-lastname="admin" 
+                    --admin-email="user@example.com" 
+                    --admin-user="admin" 
+                    --admin-password="admin123" 
+                    --language="en_US" 
+                    --currency="USD" 
+                    --timezone="America/Chicago" 
+                    --use-rewrites="1" 
+                    --backend-frontname="admin"
+                </code>
+                <br>
+                <hr>
+                <span class="pre-title warning">Err:</span>
+                <br>
+                <code class="w-warning">
+                    The requested PHP extension ext-intl * is missing from your system. Install or enable PHP's intl extension.
+                    <br>
+                </code>
+                <code class="w-success">
+                    in php.ini uncomment php_intl or download this lib
+                    <br>
+                </code>
+                <hr>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="localization">
+                <h3>Localization:</h3>
+                <p>for localization you need install module</p>
+                <code>
+                    composer require etws/magento-language-ru_ru:*
+                    <br>
+                    bin/magento setup:upgrade 
+                    <br>
+                    bin/magento cache:flush 
+                </code>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="permisson">
+                <h3>Permisson:</h3>
+                <p>Permission for root dir M2 </p>
+                <code>
+                    find . -type d -exec chmod 700 {} \; && find . -type f -exec chmod 600 {} \;
+                    <br>
+                </code>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="sdata">
+                <h3>Install simple data</h3>
+                <code>
+                    https://github.com/magento/magento2-sample-data
+                    <br>
+                </code>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="smodule">
+                <h3> Simple module:</h3>
+                <p>1. Create folder : app/code/Weblips/Test</p>
+                <hr>
+                <p>2. Registration module:</p>
+                <p class="mid-title">etc/module.xml</p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd"> 
+<i><</i>module name="Weblips_Test" setup_version="0.0.1"/> 
+<i><</i>/config>
+                    </code>
+                </pre>
+                <ul>
+                    <li>
+			name="Weblips_Test" - your`s Namespase of module
+                    </li>
+                    <li>
+			setup_version="0.0.1" - yor`s version for update and links Setup
+                    </li>
+                </ul>
+                <hr>
+                <p>3. Create you registration:</p>
+                <p class="mid-title">registration.php</p>
+                <pre>
+                    <code>
+<i><</i>?php 
+\Magento\Framework\Component\ComponentRegistrar::register( 
+    \Magento\Framework\Component\ComponentRegistrar::MODULE, 
+    'Weblips_Test', 
+    __DIR__ 
+); 
+                    </code>
+                </pre>
+                <ul>
+                    <li>
+                        'Weblips_Test' - is you module name in systems (and yor`s namespace)
+                    </li>
+                </ul>
+                <hr>
+                <p>4. (IF YOU NEED) composer.json for update module</p>
+                <p class="mid-title">composer.json</p>
+                <pre>
+                    <code>
+{
+    "name": "weblips/test",
+    "description": "N/A",
+    "require": {
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "magento/module-catalog-rule": "100.2.*", // зависимости
+        "magento/module-sample-data": "100.2.*"
+    },
+    "type": "magento2-module", // указывает что это модуль
+    "version": "100.2.0-dev", // версия согласно установки из etc/module.xml
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Weblips\\Test\\": "" //namespace
+        }
+    }
+}
+                    </code>
+                </pre>
+                <hr>
+                <p>5. Create routing:</p>
+                <p class="mid-title">etc/frontend/routes.xml   // for frontend/routes</p>
+                <p>etc/adminhtml/routes.xml   // for backend</p>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?> 
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd"> 
+    <i><</i>router id="standard"> 
+        <i><</i>route id="example" frontName="example"> 
+            <i><</i>module name="Weblips_Test" /> 
+        <i><</i>/route> 
+    <i><</i>/router> 
+<i><</i>/config>
+                    </code>
+                </pre>
+                <ul>
+                    <li>
+                        router id="standard" - default router
+                    </li>
+                    <li>
+                        route id="example" frontName="example" // unicum  http://site.com/example - for frontend/routes
+                    </li>
+                </ul>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
