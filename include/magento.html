@@ -158,7 +158,7 @@
                 <hr>
                 <p>5. Create routing:</p>
                 <p class="mid-title">etc/frontend/routes.xml   // for frontend/routes</p>
-                <p>etc/adminhtml/routes.xml   // for backend</p>
+                <p class="mid-title">etc/adminhtml/routes.xml   // for backend</p>
                 <pre>
                     <code>
 <i><</i>?xml version="1.0"?> 
@@ -176,9 +176,113 @@
                         router id="standard" - default router
                     </li>
                     <li>
-                        route id="example" frontName="example" // unicum  http://site.com/example - for frontend/routes
+                        route id="example" frontName="example" // unicum  EX: http://site.com/example - for frontend/routes
                     </li>
                 </ul>
+                <hr>
+                <p>6. Create Controller:</p>
+                <p class="mid-title">Controller/Index/Index.php  or Controller/Index.php // if you need open only this file http://site.com/example/index.php</p>
+                <p class="mid-title">Controller/Adminhtml/Index.php - for Admin panel</p>
+                <pre>
+                    <code>
+<i><</i>?php 
+
+namespace Weblips\Test\Controller\Index;
+ 
+class Index extends \Magento\Framework\App\Action\Action
+{
+    /** @var \Magento\Framework\View\Result\PageFactory  */
+    protected $resultPageFactory;
+
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+    /**
+     * Load the page defined in view/frontend/layout/example_index_index.xml
+     *
+     * @return \Magento\Framework\View\Result\Page
+     */
+    public function execute()
+    {
+        return $this->resultPageFactory->create();
+    }
+}
+                    </code>
+                </pre>
+                <hr>
+                <p>7. Create view/</p>
+                <ul>
+                    <li>
+                        view/adminhtml/layout/layouts.xml             // it`s default layout (if not exists router will be use this default layout)
+                    </li>    
+                    <li>
+                        view/frontend/layout/example_index_index.xml // default path for layout and routing
+                    </li>
+                    <li>
+                        view/frontend/templates/index.phtml          // this`s template use layout how block;
+                    </li>
+                    <li>
+                        view/adminhtml/
+                    </li>
+                </ul>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0" encoding="UTF-8"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" 
+xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/
+etc/page_configuration.xsd">
+    <i><</i>body>
+        <i><</i>referenceContainer name="content">
+            <i><</i>block class="Magento\Framework\View\Element\Template" template="Weblips_Test::index.phtml"/>
+            <i><</i>block class="Magento\Framework\View\Element\Template" template="Weblips_Test::index2.phtml"/>
+        <i><</i>/referenceContainer>
+    <i><</i>/body>
+<i><</i>/page>
+                    </code>
+                </pre>
+                <pre>
+                    <code>
+<i><</i>layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <i><</i>update handle="1column"/>
+    <i><</i>referenceContainer name="columns">
+        <i><</i>container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+            <i><</i>container name="sidebar.main" as="sidebar_main" label="Sidebar Main"/>
+        <i><</i>/container>
+        <i><</i>container name="div.sidebar.additional" htmlTag="div" htmlClass="sidebar sidebar-additional" after="div.sidebar.main">
+            <i><</i>container name="sidebar.additional" as="sidebar_additional" label="Sidebar Additional"/>
+        <i><</i>/container>
+    <i><</i>/referenceContainer>
+<i><</i>/layout>
+                    </code>
+                </pre>
+                <p class="wl-12">
+                    where: layout="2columns-left" ( 1column 2columns-left 2columns-right 3columns )<br>
+	configuration tags for layout:
+	### ROOT PAGE Element
+		<i><</i>html><br>
+		<i><</i>head><br>
+		<i><</i>body><br>
+		<i><</i>update><br>
+	### Remove ### удаление со страницы<br>
+	<i><</i>head><br>
+        <i><</i>!-- Remove local resources --><br>
+        <i><</i>remove src="css/styles-m.css" /><br>
+        <i><</i>remove src="my-js.js"/><br>
+        <i><</i>remove src="Magento_Catalog::js/compare.js" /><br>
+								
+	<!-- Remove external resources --><br>
+        <i><</i>remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/><br>
+        <i><</i>remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"/><br>
+        <i><</i>remove src="http://fonts.googleapis.com/css?family=Montserrat" /><br> 
+   <i><</i>/head><br>
+   ### Riferens container<br>
+   <i><</i>referenceContainer name="footer"><br>
+   <i><</i>referenceContainer name="content"><br>
+                </p>
                 <hr>
             </div>
         </div>
