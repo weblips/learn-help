@@ -1,0 +1,115 @@
+<div>
+    <h3><b>Magento2:</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#closures" aria-controls="closures" role="tab" data-toggle="tab">Замыкания</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="closures">
+                <p>Аналог анонимных функции c возможностью использования глобальной области используя use</p>
+                <p>Замыкание — функция, которая ссылается на глобальные переменные в своём контексте.</p>
+                <ul>
+                    <li>(<i><</i>PHP5.3) нельзя объявлять анонимные ф-ии только используя ф-ю create_function(). являются объектами данного класса</li>
+                    <li>(<i>==</i>PHP5.3) можно объявлять function()</li>
+                    <li>(<i>==</i>PHP5.4) добавлен class Closure. Класс получил методы, позволяющие контролировать анонимные функции после их создания.</li>
+                    <li>класс также имеет метод __invoke (для совместимости с др. классами имеющие магические методы)</li>
+                </ul>
+                <br>
+                <pre>
+                    <code>
+<i><</i>?php
+// замыкание 
+$z = 6;
+$hello = function($a, $b) use($z){
+    return ($a+$b)*$z;
+};
+//$z = 6;
+echo $hello(12,18);
+                    </code>
+                </pre>
+                <p> use($z) разрешает использование глобальной области в лакальной (почти аналог global)<br>
+                    но если переменная $z - иниц-а после анонимной функции получите Notice,а $z=0
+                </p>
+                <br>
+                <pre>
+                    <code>
+Closure {
+/* Методы */
+private __construct ( void )
+public static Closure bind ( Closure $closure , object $newthis [, mixed $newscope = "static" ] )
+public Closure bindTo ( object $newthis [, mixed $newscope = "static" ] )
+public mixed call ( object $newthis [, mixed $... ] )
+public static Closure fromCallable ( callable $callable )
+}
+                    </code>
+                </pre>
+                <p>Closure::__construct — Конструктор запрещающий создавать новые объекты</p>
+                <p>Closure::bind — Дублирует замыкание с указанием конкретного связанного объекта и области видимости класса</p>
+                <p>Closure::bindTo — Дублирует замыкание с указанием связанного объекта и области видимости класса</p>
+                <p>Closure::call — Связывает и запускает замыкание</p>
+                <p>Closure::fromCallable — Конвертация callable в замыкание</p>
+                <pre>
+                    <code>
+$deleteDirectory = null;
+$deleteDirectory = function($path) use (&$deleteDirectory) {
+    $resource = opendir($path);
+    while (($item = readdir($resource)) !== false) {
+        if ($item !== "." && $item !== "..") {
+            if (is_dir($path . "/" . $item)) {
+                $deleteDirectory($path . "/" . $item);
+            } else {
+                unlink($path . "/" . $item);
+            }
+        }
+    }
+    closedir($resource);
+    rmdir($path);
+};
+$deleteDirectory("path/to/directoy");
+                    </code>
+                </pre>
+            </div>
+            <p style="font-size: 14px"><b>Руфльный пример замыкания: создание Cache</b></p><br>
+            т.е в метод класса нужно передать кусок кода => спользуем замыкание 
+            <pre>
+                <code>
+<i><</i>?php 
+$dateCreated = date('Y-m-d');
+$dbQueryCounter = 0;
+$fallback = function() use($dateCreated, &$dbQueryCounter) { 
+   $dbQueryCounter++;   //счетчик импортирован в замыкание по ссылке
+   return PostModel::getList($dateCreated); // не забываем return
+}; 
+Cache::wrapper( "posts_" . $dateCreated , $fallback );
+
+Class Cache
+{
+    static function set( $key, $value) {
+       //  код записи в кеш
+    }
+    static function get( $key ) {
+       // код чтения из кеша
+    }
+    static function wrapper( $key, Closure $fallback ) {
+        $data = self::get( $key );
+        if( !$data ) {
+            $data = $fallback(); // отложенное выполнение кода
+            self::set( $key, $data); 
+        }
+        return $data;
+    }
+}                
+                </code>
+            </pre>
+        </div>
+        <hr>
+        <!--- end Closure ---->
+    </div>
+</div>

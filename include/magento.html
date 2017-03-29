@@ -15,6 +15,7 @@
             <li role="presentation"><a href="#deflogo" aria-controls="deflogo" role="tab" data-toggle="tab">Change Default Logo for Custom Module</a></li>
             <li role="presentation"><a href="#acl" aria-controls="acl" role="tab" data-toggle="tab">ACL</a></li>
             <li role="presentation"><a href="#admcon" aria-controls="admcon" role="tab" data-toggle="tab">Create Router ADMIN AND CONTROLLER</a></li>
+            <li role="presentation"><a href="#layout" aria-controls="layout" role="tab" data-toggle="tab">Layout</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -479,7 +480,32 @@ class Index extends \Magento\Framework\App\Action\Action
 }
                     </code>
                 </pre>
-                
+            </div>    
+            <div role="tabpanel" class="tab-pane" id="layout">
+                <ul>
+                    <li>
+                        - макет(layout) подтягивается при обращеннии к контроллеру
+                    </li>
+                    <li>
+                        - т.е есть ссылка: <i><</i>router_id>_<i><</i>controller folder>_<i><</i>action_controller>.xml</br>
+- default.xml - это дефолтный макет для отображения</br>
+Виды макетов:</br>
+             - admin-2columns-left</br>
+			 - admin-1column</br>
+
+Для отображения default style(menu, copiright, content = null) ::: <i><</i>update handle="styles" /></br>
+                    </li>
+                </ul>
+                <pre>
+                    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <i><</i>update handle="styles" />
+    <i><</i>body>
+    <i><</i>/body>
+<i><</i>/page>
+                    </code>
+                </pre>
             </div>    
         </div>
     </div>
