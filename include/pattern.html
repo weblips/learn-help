@@ -6,7 +6,7 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
-            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Абстрактная фабрика</a></li>
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Фабричный метод</a></li>
             <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">шаблон2</a></li>
             <li role="presentation"><a href="#pull" aria-controls="pull" role="tab" data-toggle="tab">pull singelton</a></li>
             <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">шаблон3</a></li>
@@ -21,21 +21,78 @@
                 <table class="table table-bordered">
                     <tr>
                         <td>
-                            <b>Абстрактная фабрика (Abstract factory)</b>
+                            <b>Фабричный метод(Fabric Method)</b>
                         </td>
                         <td>
-                            Класс, который представляет собой интерфейс для создания компонентов системы.
+                            не нужно наследовать все и не нужно делать, а потом менять весь функционал предков
                         </td>
                     </tr>
                 </table>
-                <ul>
-                    <li>
-                        
-                    </li>
-                </ul>
+                <pre>
+                    <code>
+<i><</i>?php
+################## Start for Fabric Method #######################
+
+interface Factory{
+    
+    public function getProduct();
+}
+
+interface Product{
+    public function getAll();
+}
+
+class BookFactory implements Factory{
+    public function getProduct(){
+        return new BookProduct();
+    }
+}
+
+class EBookFactory implements Factory{
+    public function getProduct(){
+        return new EBookProduct();
+    }
+}
+
+class BookProduct implements Product {
+    public $settings = array('id'=>12, 'name' => 'Hot Summer', 'type'=> 'simple', 'author' => 'Mike Bense' );
+    public function getAll(){
+        return $this->settings;
+    }
+}
+
+class EBookProduct implements Product {
+    public $settings = array('id'=>12, 'name' => 'EHot Summer', 'type'=> 'simple', 'author' => 'Mike Bense' );
+    public function getAll(){
+        return $this->settings;
+    }
+}
+###########################################################
+
+$factory = new BookFactory();
+$bookProduct = $factory->getProduct();
+print_r($bookProduct->getAll());
+// OR
+$factoryEBook = new EBookFactory();
+print_r($factoryEBook->getProduct()->getAll());
+                        </code>
+                </pre>
             </div>
             <div role="tabpanel" class="tab-pane" id="messages">.3.</div>
             <div role="tabpanel" class="tab-pane" id="pull">.4.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
+            <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
             <div role="tabpanel" class="tab-pane" id="settings">.5.</div>
         </div>
     </div>
