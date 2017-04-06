@@ -8,6 +8,7 @@
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
             <li role="presentation"><a href="#install" aria-controls="install" role="tab" data-toggle="tab">Install</a></li>
             <li role="presentation"><a href="#localization" aria-controls="localization" role="tab" data-toggle="tab">Localization</a></li>
+            <li role="presentation"><a href="#dev" aria-controls="dev" role="tab" data-toggle="tab">Enable dev mod</a></li>
             <li role="presentation"><a href="#permisson" aria-controls="permisson" role="tab" data-toggle="tab">Permisson Apache</a></li>
             <li role="presentation"><a href="#sdata" aria-controls="sdata" role="tab" data-toggle="tab">Simple Data</a></li>
             <li role="presentation"><a href="#smodule" aria-controls="smodule" role="tab" data-toggle="tab">Simple Module</a></li>
@@ -32,7 +33,8 @@
                 <br>
                 <span class="pre-title">Install with CLI:</span>
                 <br>
-                <code>
+				<pre>
+					<code>
                     php bin/magento setup:install 
                     --base-url="http://yoururl.com/" 
                     --db-host="localhost" 
@@ -49,7 +51,8 @@
                     --timezone="America/Chicago" 
                     --use-rewrites="1" 
                     --backend-frontname="admin"
-                </code>
+					</code>
+				</pre>
                 <br>
                 <hr>
                 <span class="pre-title warning">Err:</span>
@@ -63,6 +66,62 @@
                     <br>
                 </code>
                 <hr>
+                <code class="w-warning">
+ Package fabpot/php-cs-fixer is abandoned, you should avoid using it. Use friendsofphp/php-cs-fixer instead.
+                    <br>
+                </code>
+                <code class="w-success">
+  Replace "fabpot/php-cs-fixer": "~1.2" with -"friendsofphp/php-cs-fixer": "~2.0"
+  composer update
+  composer install
+                    
+                    <br>
+                </code>
+            </div>
+			<div role="tabpanel" class="tab-pane" id="dev">
+                <h3>Develorer mod:</h3>
+                <p>- for localization you need install module</p>
+				<p>- Режим производства также имеет более высокую производительность , так как статические файлы представления заполняются в pub/static каталоге и из - за компиляции кода.</p>
+				<p>- при смене режима разработки удаляются след.файлы</p>
+				<p>Исключения:</p>
+				.htaccess файлы не удаляются
+				pub/static содержит файл, который определяет версию статического контента; этот файл не удаляется
+				<pre>
+                <code>
+var/cache
+var/di
+var/generation
+var/view_preprocessed
+pub/static
+                </code>
+				</pre>
+				<p>Команды для перехода в режим продакшэн</p>
+				<pre>
+				<code>
+bin/magento deploy:mode:show
+bin/magento deploy:mode:set production
+				</code>
+				</pre>
+				<p>Команды для перехода в режим developer </p>
+				<p>- при переходе из прод. в dev удолить содержимое папок:</p>
+				<pre>
+				<code>
+rm -rf /var/di/* /var/generation/* 
+bin/magento deploy:mode:set developer
+				</code>
+				</pre>
+                                <p></p>
+                                <code class="w-warning">
+                                     Unable to proceed: the maintenance mode is enabled.
+                                </code>
+                                <br>
+                                <code class="w-success">
+                                    CLI:
+                                    bin/magento maintenance:disable 
+                                    <br>
+                                    FILE:
+                                    Delete var/.maintenance.flag
+                                </code>
             </div>
             <div role="tabpanel" class="tab-pane" id="localization">
                 <h3>Localization:</h3>
@@ -164,6 +223,7 @@
                 <p>5. Create routing:</p>
                 <p class="mid-title">etc/frontend/routes.xml   // for frontend/routes</p>
                 <p class="mid-title">etc/adminhtml/routes.xml   // for backend</p>
+                <p class="mid-title">  -  <i><</i>router id="admin">   // for backend -admin</p>
                 <pre>
                     <code>
 <i><</i>?xml version="1.0"?> 
@@ -179,6 +239,9 @@
                 <ul>
                     <li>
                         router id="standard" - default router
+                    </li>
+                    <li>
+                        router id="admin" - for adminpanel
                     </li>
                     <li>
                         route id="example" frontName="example" // unicum  EX: http://site.com/example - for frontend/routes
