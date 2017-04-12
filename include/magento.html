@@ -17,6 +17,10 @@
             <li role="presentation"><a href="#acl" aria-controls="acl" role="tab" data-toggle="tab">ACL</a></li>
             <li role="presentation"><a href="#admcon" aria-controls="admcon" role="tab" data-toggle="tab">Create Router ADMIN AND CONTROLLER</a></li>
             <li role="presentation"><a href="#layout" aria-controls="layout" role="tab" data-toggle="tab">Layout</a></li>
+            <li role="presentation"><a href="#setup" aria-controls="setup" role="tab" data-toggle="tab">InstallSchema</a></li>
+            <li role="presentation"><a href="#setupdata" aria-controls="setupdata" role="tab" data-toggle="tab">InstallData</a></li>
+            <li role="presentation"><a href="#setupdataeav" aria-controls="setupdataeav" role="tab" data-toggle="tab">InstallData EAV</a></li>
+            <li role="presentation"><a href="#schemaupdate" aria-controls="schemaupdate" role="tab" data-toggle="tab">UpgradeSchema</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -33,7 +37,7 @@
                 <br>
                 <span class="pre-title">Install with CLI:</span>
                 <br>
-				<pre>
+                <pre>
 					<code>
                     php bin/magento setup:install 
                     --base-url="http://yoururl.com/" 
@@ -52,7 +56,7 @@
                     --use-rewrites="1" 
                     --backend-frontname="admin"
 					</code>
-				</pre>
+                </pre>
                 <br>
                 <hr>
                 <span class="pre-title warning">Err:</span>
@@ -67,26 +71,26 @@
                 </code>
                 <hr>
                 <code class="w-warning">
- Package fabpot/php-cs-fixer is abandoned, you should avoid using it. Use friendsofphp/php-cs-fixer instead.
+                    Package fabpot/php-cs-fixer is abandoned, you should avoid using it. Use friendsofphp/php-cs-fixer instead.
                     <br>
                 </code>
                 <code class="w-success">
-  Replace "fabpot/php-cs-fixer": "~1.2" with -"friendsofphp/php-cs-fixer": "~2.0"
-  composer update
-  composer install
-                    
+                    Replace "fabpot/php-cs-fixer": "~1.2" with -"friendsofphp/php-cs-fixer": "~2.0"
+                    composer update
+                    composer install
+
                     <br>
                 </code>
             </div>
-			<div role="tabpanel" class="tab-pane" id="dev">
+            <div role="tabpanel" class="tab-pane" id="dev">
                 <h3>Develorer mod:</h3>
                 <p>- for localization you need install module</p>
-				<p>- Режим производства также имеет более высокую производительность , так как статические файлы представления заполняются в pub/static каталоге и из - за компиляции кода.</p>
-				<p>- при смене режима разработки удаляются след.файлы</p>
-				<p>Исключения:</p>
-				.htaccess файлы не удаляются
-				pub/static содержит файл, который определяет версию статического контента; этот файл не удаляется
-				<pre>
+                <p>- Режим производства также имеет более высокую производительность , так как статические файлы представления заполняются в pub/static каталоге и из - за компиляции кода.</p>
+                <p>- при смене режима разработки удаляются след.файлы</p>
+                <p>Исключения:</p>
+                .htaccess файлы не удаляются
+                pub/static содержит файл, который определяет версию статического контента; этот файл не удаляется
+                <pre>
                 <code>
 var/cache
 var/di
@@ -94,34 +98,34 @@ var/generation
 var/view_preprocessed
 pub/static
                 </code>
-				</pre>
-				<p>Команды для перехода в режим продакшэн</p>
-				<pre>
+                </pre>
+                <p>Команды для перехода в режим продакшэн</p>
+                <pre>
 				<code>
 bin/magento deploy:mode:show
 bin/magento deploy:mode:set production
 				</code>
-				</pre>
-				<p>Команды для перехода в режим developer </p>
-				<p>- при переходе из прод. в dev удолить содержимое папок:</p>
-				<pre>
+                </pre>
+                <p>Команды для перехода в режим developer </p>
+                <p>- при переходе из прод. в dev удолить содержимое папок:</p>
+                <pre>
 				<code>
 rm -rf /var/di/* /var/generation/* 
 bin/magento deploy:mode:set developer
 				</code>
-				</pre>
-                                <p></p>
-                                <code class="w-warning">
-                                     Unable to proceed: the maintenance mode is enabled.
-                                </code>
-                                <br>
-                                <code class="w-success">
-                                    CLI:
-                                    bin/magento maintenance:disable 
-                                    <br>
-                                    FILE:
-                                    Delete var/.maintenance.flag
-                                </code>
+                </pre>
+                <p></p>
+                <code class="w-warning">
+                    Unable to proceed: the maintenance mode is enabled.
+                </code>
+                <br>
+                <code class="w-success">
+                    CLI:
+                    bin/magento maintenance:disable 
+                    <br>
+                    FILE:
+                    Delete var/.maintenance.flag
+                </code>
             </div>
             <div role="tabpanel" class="tab-pane" id="localization">
                 <h3>Localization:</h3>
@@ -165,10 +169,10 @@ bin/magento deploy:mode:set developer
                 </pre>
                 <ul>
                     <li>
-			name="Weblips_Test" - your`s Namespase of module
+                        name="Weblips_Test" - your`s Namespase of module
                     </li>
                     <li>
-			setup_version="0.0.1" - yor`s version for update and links Setup
+                        setup_version="0.0.1" - yor`s version for update and links Setup
                     </li>
                 </ul>
                 <hr>
@@ -329,27 +333,27 @@ etc/page_configuration.xsd">
                 </pre>
                 <p class="wl-12">
                     where: layout="2columns-left" ( 1column 2columns-left 2columns-right 3columns )<br>
-	configuration tags for layout:
-	### ROOT PAGE Element
-		<i><</i>html><br>
-		<i><</i>head><br>
-		<i><</i>body><br>
-		<i><</i>update><br>
-	### Remove ### удаление со страницы<br>
-	<i><</i>head><br>
-        <i><</i>!-- Remove local resources --><br>
-        <i><</i>remove src="css/styles-m.css" /><br>
-        <i><</i>remove src="my-js.js"/><br>
-        <i><</i>remove src="Magento_Catalog::js/compare.js" /><br>
-								
-	<!-- Remove external resources --><br>
-        <i><</i>remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/><br>
-        <i><</i>remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"/><br>
-        <i><</i>remove src="http://fonts.googleapis.com/css?family=Montserrat" /><br> 
-   <i><</i>/head><br>
-   ### Riferens container<br>
-   <i><</i>referenceContainer name="footer"><br>
-   <i><</i>referenceContainer name="content"><br>
+                    configuration tags for layout:
+                    ### ROOT PAGE Element
+                    <i><</i>html><br>
+                    <i><</i>head><br>
+                    <i><</i>body><br>
+                    <i><</i>update><br>
+                    ### Remove ### удаление со страницы<br>
+                    <i><</i>head><br>
+                    <i><</i>!-- Remove local resources --><br>
+                    <i><</i>remove src="css/styles-m.css" /><br>
+                    <i><</i>remove src="my-js.js"/><br>
+                    <i><</i>remove src="Magento_Catalog::js/compare.js" /><br>
+
+                    <!-- Remove external resources --><br>
+                    <i><</i>remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/><br>
+                    <i><</i>remove src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"/><br>
+                    <i><</i>remove src="http://fonts.googleapis.com/css?family=Montserrat" /><br> 
+                    <i><</i>/head><br>
+                    ### Riferens container<br>
+                    <i><</i>referenceContainer name="footer"><br>
+                    <i><</i>referenceContainer name="content"><br>
                 </p>
                 <hr>
             </div>
@@ -409,7 +413,7 @@ etc/page_configuration.xsd">
                     </code>
                 </pre>
             </div>
-                <hr>
+            <hr>
             <div role="tabpanel" class="tab-pane" id="deflogo">
                 <p class="mid-title">add images(svg) to view/adminhtml/web/images/your.svg</p>
                 <p class="mid-title">view/adminhtml/web/css/base.css add :</p>
@@ -445,7 +449,7 @@ etc/page_configuration.xsd">
                 </pre>
                 <hr>
             </div>
-                
+
             <div role="tabpanel" class="tab-pane" id="acl">
                 <p class="mid-title">/etc/acl.xml</p>
                 <p>в acl добавляем все menu и подменю т.к по умолчанию Controller is _allow</p>
@@ -487,7 +491,7 @@ protected function _isAllowed(){
                 </pre>
                 <hr>
             </div>    
-        <div role="tabpanel" class="tab-pane" id="admcon">
+            <div role="tabpanel" class="tab-pane" id="admcon">
                 <p class="mid-title">etc/adminhtml/routes.xml</p>
                 <p>http://yoursite.com/index.php/[route_name]/[controller_name]/[action_name]   // frontend router</p>
                 <pre>
@@ -551,12 +555,12 @@ class Index extends \Magento\Framework\App\Action\Action
                     </li>
                     <li>
                         - т.е есть ссылка: <i><</i>router_id>_<i><</i>controller folder>_<i><</i>action_controller>.xml</br>
-- default.xml - это дефолтный макет для отображения</br>
-Виды макетов:</br>
-             - admin-2columns-left</br>
-			 - admin-1column</br>
+                        - default.xml - это дефолтный макет для отображения</br>
+                        Виды макетов:</br>
+                        - admin-2columns-left</br>
+                        - admin-1column</br>
 
-Для отображения default style(menu, copiright, content = null) ::: <i><</i>update handle="styles" /></br>
+                        Для отображения default style(menu, copiright, content = null) ::: <i><</i>update handle="styles" /></br>
                     </li>
                 </ul>
                 <pre>
@@ -570,6 +574,823 @@ class Index extends \Magento\Framework\App\Action\Action
                     </code>
                 </pre>
             </div>    
+            <div role="tabpanel" class="tab-pane" id="setup">
+                <span class="pre-title">Create InstallSchema</span>
+                <br>
+                <p>Setup/InstallSchema.php</p>
+                <pre>
+    <code>
+<i><</i>?php
+
+namespace Weblips\Data\Setup;
+
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
+class InstallSchema implements InstallSchemaInterface
+{
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $installer = $setup;
+        $installer->startSetup();
+        $table = $installer->getConnection()
+                ->newTable($installer->getTable('weblips_data'))
+                ->addColumn(
+                'weblips_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                [
+                    'identity' => true,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'primary' => true
+                 ],
+                'Weblips Id'
+            )
+            ->addColumn(
+                'name',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Name'
+            )
+            ->addColumn(
+                'url_key',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Url Key'
+            )
+            ->setComment('Weblips Post');
+        $installer->endSetup();
+    }
+}
+
+    </code>
+                </pre>
+                <p class="succsses">
+                    Where:
+                </p>
+                <pre>
+    <code>
+         Дополнительно используем:
+                                  use Magento\Framework\DB\Ddl\Table;
+                                  use Magento\Framework\DB\Adapter\AdapterInterface;
+   Для того чтобы в контексте создания таблицы использовать сокращение Table::
+   вместо \Magento\Framework\DB\Ddl\Table::
+   т.е:
+   ->addColumn(
+                'name',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Name'
+            )
+    -------------------------------------------------------------------
+    ->addColumn(
+                'name',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Name'
+            )
+    </code>
+                </pre>
+                Description methods for create table/column
+                <pre>
+    <code>
+        $installer = $setup;
+        $installer->startSetup(); //указываем что начинаеться установка
+        $table = $installer->getConnection()                     // соединяем с бд
+                ->newTable($installer->getTable('weblips_data')) // создаем новую таблицу
+                ->addColumn(                                     // добавляем колонку
+                'weblips_id',                                    // название колонку
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,   // тип колонки
+  или 
+                Table::TYPE_INTEGER,                            
+                null,                                            // размер /null - по умолчанию
+                [
+                    'identity' => true,                          // уникальность
+                    'unsigned' => true,                          // только положительное 
+                    'nullable' => false,                         // Not null
+                    'primary' => true                            // Primary key
+                 ],
+                'Weblips Id'                                     // комментарий к полю
+            )
+            ->setComment('Blog Posts');                          // Название сущьности для EAV таблицы
+            $installer->getConnection()->createTable($table);    // Команда на создание таблицы
+            
+            $table = $installer->getConnection()                  // создание новой таблицы Аналог
+            ->newTable($installer->getTable('mgs_blog_category'))
+            ->addColumn
+            ->setComment('By by');                          
+            $installer->getConnection()->createTable($table);
+            
+            $installer->endSetup();                                 //закрываем installer
+            
+    </code>
+                </pre>
+                <p class="wl-12">Так же можно создавать дополнительные внешнии ключи и fulltext для поиска</p>
+                <pre>
+    <code>
+        ->addIndex(
+                $installer->getIdxName('mgs_blog_post', ['url_key']),
+                ['url_key']
+            )->addIndex(
+                $setup->getIdxName(
+                    $installer->getTable('mgs_blog_post'),
+                    ['title', 'url_key', 'short_content', 'content', 'meta_keywords', 'meta_description', 'tags'],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                ['title', 'url_key', 'short_content', 'content', 'meta_keywords', 'meta_description', 'tags'],
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            )
+    </code>
+                </pre>
+                <p class="wl-12">Некоторые поля:</p>
+                <p class="wl-12">id</p>
+                <pre>
+    <code>
+        ->addColumn(
+                'post_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Post Id'
+            )
+    </code>
+                </pre>
+                <p class="wl-12">small int</p>
+                <pre>
+    <code>
+        ->addColumn(
+                'store_id',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Store Id'
+            )
+    </code>
+                </pre>
+                <p class="wl-12">Name - next 255</p>
+                <pre>
+    <code>
+        ->addColumn(
+                'name',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Name'
+            )
+    </code>
+                </pre>
+                <p class="wl-12">Text description</p>
+                <pre>
+    <code>
+        ->addColumn(
+                'description',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                null,
+                ['default' => null],
+                'Description'
+            )
+    </code>
+                </pre>
+                <p class="wl-12">TimeStamp</p>
+                <pre>
+    <code>
+        ->addColumn(
+                'created_at',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Created At'
+            )
+    </code>
+                </pre>
+                <p class="wl-12">Small int whith default value</p>
+                <pre>
+    <code>
+        ->addColumn(
+                'status',
+                Table::TYPE_SMALLINT,
+                null,
+                ['nullable' => false, 'default' => '1'],
+                'Status'
+            )
+    </code>
+                </pre>
+                <p>Полный файл:</p>
+                <pre>
+                  <code>
+<i><</i>?php
+
+namespace MGS\Blog\Setup;
+
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
+class InstallSchema implements InstallSchemaInterface
+{
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $installer = $setup;
+        $installer->startSetup();
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_post'))
+            ->addColumn(
+                'post_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Post Id'
+            )
+            ->addColumn(
+                'title',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Title'
+            )
+            ->addColumn(
+                'url_key',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Url Key'
+            )
+            ->addColumn(
+                'thumbnail',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Thumbnail'
+            )
+            ->addColumn(
+                'short_content',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Short Content'
+            )
+            ->addColumn(
+                'content',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => false],
+                'Content'
+            )
+            ->addColumn(
+                'meta_keywords',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Meta Keywords'
+            )
+            ->addColumn(
+                'meta_description',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Meta Description'
+            )
+            ->addColumn(
+                'tags',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Tags'
+            )
+            ->addColumn(
+                'user',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => true, 'default' => null],
+                'User'
+            )
+            ->addColumn(
+                'updated_by_user',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => true, 'default' => null],
+                'Updated By User'
+            )
+            ->addColumn(
+                'created_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Created At'
+            )
+            ->addColumn(
+                'updated_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
+                'Updated At'
+            )
+            ->addColumn(
+                'status',
+                Table::TYPE_SMALLINT,
+                null,
+                ['nullable' => false, 'default' => '1'],
+                'Status'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_post', ['url_key']),
+                ['url_key']
+            )->addIndex(
+                $setup->getIdxName(
+                    $installer->getTable('mgs_blog_post'),
+                    ['title', 'url_key', 'short_content', 'content', 'meta_keywords', 'meta_description', 'tags'],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                ['title', 'url_key', 'short_content', 'content', 'meta_keywords', 'meta_description', 'tags'],
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            )
+            ->setComment('Blog Posts');
+        $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_category'))
+            ->addColumn(
+                'category_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Category Id'
+            )
+            ->addColumn(
+                'title',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Title'
+            )
+            ->addColumn(
+                'url_key',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Url Key'
+            )
+            ->addColumn(
+                'meta_keywords',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Meta Keywords'
+            )
+            ->addColumn(
+                'meta_description',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => true, 'default' => null],
+                'Meta Description'
+            )
+            ->addColumn(
+                'sort_order',
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'default' => '0'],
+                'Sort Order'
+            )
+            ->addColumn(
+                'status',
+                Table::TYPE_SMALLINT,
+                null,
+                ['nullable' => false, 'default' => '1'],
+                'Status'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_category', ['url_key']),
+                ['url_key']
+            )->addIndex(
+                $setup->getIdxName(
+                    $installer->getTable('mgs_blog_category'),
+                    ['title', 'url_key', 'meta_keywords', 'meta_description'],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                ['title', 'url_key', 'meta_keywords', 'meta_description'],
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            )
+            ->setComment('Blog Categories');
+        $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_comment'))
+            ->addColumn(
+                'comment_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Comment Id'
+            )
+            ->addColumn(
+                'post_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Post Id'
+            )
+            ->addColumn(
+                'name',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Name'
+            )
+            ->addColumn(
+                'email',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Email'
+            )
+            ->addColumn(
+                'content',
+                Table::TYPE_TEXT,
+                null,
+                ['nullable' => false],
+                'Content'
+            )
+            ->addColumn(
+                'created_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Created At'
+            )
+            ->addColumn(
+                'updated_at',
+                Table::TYPE_TIMESTAMP,
+                null,
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
+                'Updated At'
+            )
+            ->addColumn(
+                'status',
+                Table::TYPE_SMALLINT,
+                null,
+                ['nullable' => false, 'default' => '2'],
+                'Status'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_comment', ['email']),
+                ['email']
+            )->addIndex(
+                $setup->getIdxName(
+                    $installer->getTable('mgs_blog_comment'),
+                    ['name', 'email', 'content'],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                ['name', 'email', 'content'],
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            )
+            ->setComment('Blog Comments');
+        $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_tag'))
+            ->addColumn(
+                'tag_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Tag Id'
+            )
+            ->addColumn(
+                'tag',
+                Table::TYPE_TEXT,
+                250,
+                ['nullable' => false],
+                'Tag'
+            )
+            ->addColumn(
+                'tag_count',
+                Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'default' => '0'],
+                'Tag Count'
+            )
+            ->addColumn(
+                'store_id',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Store Id'
+            )
+            ->addColumn(
+                'status',
+                Table::TYPE_SMALLINT,
+                null,
+                ['nullable' => false, 'default' => '1'],
+                'Status'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_tag', ['tag']),
+                ['tag']
+            )->addIndex(
+                $setup->getIdxName(
+                    $installer->getTable('mgs_blog_tag'),
+                    ['tag'],
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
+                ['tag'],
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            )
+            ->setComment('Blog Tags');
+        $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_post_store'))
+            ->addColumn(
+                'post_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Post Id'
+            )
+            ->addColumn(
+                'store_id',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Store Id'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_post_store', ['post_id']),
+                ['post_id']
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_post_store', ['store_id']),
+                ['store_id']
+            )
+            ->addForeignKey(
+                $installer->getFkName('mgs_blog_post_store', 'post_id', 'mgs_blog_post', 'post_id'),
+                'post_id',
+                $installer->getTable('mgs_blog_post'),
+                'post_id',
+                Table::ACTION_CASCADE
+            )
+            ->addForeignKey(
+                $installer->getFkName('mgs_blog_post_store', 'store_id', 'store', 'store_id'),
+                'store_id',
+                $installer->getTable('store'),
+                'store_id',
+                Table::ACTION_CASCADE
+            )
+            ->setComment('Blog Post Store');
+        $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_category_store'))
+            ->addColumn(
+                'category_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Category Id'
+            )
+            ->addColumn(
+                'store_id',
+                Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Store Id'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_category_store', ['category_id']),
+                ['category_id']
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_category_store', ['store_id']),
+                ['store_id']
+            )
+            ->addForeignKey(
+                $installer->getFkName('mgs_blog_category_store', 'category_id', 'mgs_blog_category', 'category_id'),
+                'category_id',
+                $installer->getTable('mgs_blog_category'),
+                'category_id',
+                Table::ACTION_CASCADE
+            )
+            ->addForeignKey(
+                $installer->getFkName('mgs_blog_category_store', 'store_id', 'store', 'store_id'),
+                'store_id',
+                $installer->getTable('store'),
+                'store_id',
+                Table::ACTION_CASCADE
+            )
+            ->setComment('Blog Category Store');
+        $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable('mgs_blog_category_post'))
+            ->addColumn(
+                'category_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Category Id'
+            )
+            ->addColumn(
+                'post_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Post Id'
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_category_post', ['category_id']),
+                ['category_id']
+            )
+            ->addIndex(
+                $installer->getIdxName('mgs_blog_category_post', ['post_id']),
+                ['post_id']
+            )
+            ->addForeignKey(
+                $installer->getFkName('mgs_blog_category_post', 'category_id', 'mgs_blog_category', 'category_id'),
+                'category_id',
+                $installer->getTable('mgs_blog_category'),
+                'category_id',
+                Table::ACTION_CASCADE
+            )
+            ->addForeignKey(
+                $installer->getFkName('mgs_blog_category_post', 'post_id', 'mgs_blog_post', 'post_id'),
+                'post_id',
+                $installer->getTable('mgs_blog_post'),
+                'post_id',
+                Table::ACTION_CASCADE
+            )
+            ->setComment('Blog Category Post');
+        $installer->getConnection()->createTable($table);
+        $installer->endSetup();
+    }
+}
+
+                  </code>
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="setupdata">
+                <p>InstallData</p>
+                <p>Create Setup/InstallData.php</p>
+                <p class="wl-12">Установка значений БД в новосозданную таблицу</p>
+                <pre>
+    <code>
+namespace Weblips\Data\Setup;
+
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+
+class InstallData implements InstallDataInterface
+{
+	/**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        /**
+         * Fill table magev2_protabs
+         */
+        $data = [
+            ['Main Menu', 1, NULL, 1]
+        ];
+
+        $columns = ['title', 'menu_type', 'custom_class', 'status'];
+        $setup->getConnection()->insertArray($setup->getTable('mgs_megamenu_parent'), $columns, $data);
+    }
+}
+    </code>
+                </pre>
+                <p class="wl-12"> Или группу </p>
+                <pre>
+    <code>
+        namespace Weblips\Data2\Setup;
+
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+
+class InstallData implements InstallDataInterface
+{
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $data = [
+            [ 'hello', 'http://weeds.ua', NULL],
+            [ 'hello1', 'http://weeds.u1a', Null]
+        ];
+
+        $columns = ['name', 'url_key', 'created_at'];
+        foreach ($data as $value){
+        $setup->getConnection()->insertArray($setup->getTable('weblips_data'), $columns, $value);
+        }
+    }
+}
+
+    </code>
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="schemaupdate">
+                <p class="wl-12">Upgrate Schema если версия больше 3.0.0</p>
+                <pre>
+    <code>
+namespace Weblips\Data\Setup;
+
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+
+class UpgradeSchema implements UpgradeSchemaInterface
+{
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $setup->startSetup();
+        if (version_compare($context->getVersion(), '3.0.0', '>=')) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('weblips_data'),
+                'image',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'nullable' => true,
+                    'default' => null,
+                    'comment' => 'Image'
+                ]
+            );
+        }
+        $setup->endSetup();
+    }
+}
+    </code>
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="setupdataeav">
+                <pre>
+    <code>
+namespace MGS\Brand\Setup;
+
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+
+class InstallData implements InstallDataInterface
+{
+    private $eavSetupFactory;
+
+    public function __construct(EavSetupFactory $eavSetupFactory)
+    {
+        $this->eavSetupFactory = $eavSetupFactory;
+    }
+
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $productTypes = [
+            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
+            \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
+            \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+            \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE,
+        ];
+        $productTypes = join(',', $productTypes);
+        $eavSetup->addAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'mgs_brand',
+            [
+                'group' => 'Product Details',
+                'sort_order' => 100,
+                'type' => 'int',
+                'backend' => '',
+                'frontend' => '',
+                'label' => 'Brand',
+                'input' => 'select',
+                'class' => '',
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
+                'visible' => true,
+                'required' => false,
+                'user_defined' => true,
+                'searchable' => true,
+                'filterable' => true,
+                'comparable' => true,
+                'visible_in_advanced_search' => true,
+                'visible_on_front' => true,
+                'used_in_product_listing' => true,
+                'unique' => false,
+                'apply_to' => $productTypes,
+                'is_used_in_grid' => true,
+                'is_visible_in_grid' => false,
+                'is_filterable_in_grid' => true,
+            ]
+        );
+    }
+}
+        
+    </code>
+                </pre>
+            </div>
         </div>
     </div>
 </div>
