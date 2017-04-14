@@ -8,6 +8,7 @@
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
             <li role="presentation"><a href="#user" aria-controls="user" role="tab" data-toggle="tab">Create User</a></li>
             <li role="presentation"><a href="#db" aria-controls="db" role="tab" data-toggle="tab">DB-UTF8</a></li>
+            <li role="presentation"><a href="#import" aria-controls="import" role="tab" data-toggle="tab">Import/Export</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -26,6 +27,20 @@
                 <pre>
                     <code>
                         CREATE DATABASE `mydatabase` CHARACTER SET utf8 COLLATE utf8_general_ci;
+                    </code>
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="import">
+                <p class="wl-12">Import to db </p>
+                <pre>
+                    <code>
+                        mysql -uroot -proot -f mydbname < dumpsql.sql
+                    </code>
+                </pre>
+                <p class="wl-12">Export with db </p>
+                <pre>
+                    <code>
+                        mysqldump -u [uname] -p[pass] db_name > db_backup.sql
                     </code>
                 </pre>
             </div>

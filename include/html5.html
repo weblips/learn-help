@@ -1,0 +1,48 @@
+<div>
+    <h3><b>html5</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Обработка форм</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="form">
+                <p>Обработка форм (html)</p>
+                <pre>
+                    <code>
+                        <i><</i>form name="name" action="index.php" method="post">
+  <i><</i>div>
+    <i><</i>input type="text" name="user[name]" />
+    <i><</i>br />
+    <i><</i>input type="text" name="user[email]" />
+    <i><</i>br />
+    <i><</i>input type="text" name="user[password]" />
+    <i><</i>br />
+    <i><</i>input type="submit" value="Отправить" />
+  <i><</i>/div>
+<i><</i>/form>
+                    </code>
+                </pre>
+                <p class="wl-12">Посмотрим результат</p>
+                <pre>
+    <code>
+ $user = $_POST["user"];       
+    </code>
+                </pre>
+                <p class="wl-12">Пример с checkbox:</p>
+                <pre>
+    <code>
+<i><</i>input type="checkbox" name="sections[]" value="1" /> Раздел 1
+<i><</i>input type="checkbox" name="sections[]" value="2" /> Раздел 2        
+    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
