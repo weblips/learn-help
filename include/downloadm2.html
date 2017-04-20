@@ -1,0 +1,82 @@
+<div>
+    <h3><b>Download M2</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#weblipscore" aria-controls="weblipscore" role="tab" data-toggle="tab">Core Weblips module</a></li>
+            <li role="presentation"><a href="#localizationjs" aria-controls="localizationjs" role="tab" data-toggle="tab">Localization JS </a></li>
+            <li role="presentation"><a href="#searchm" aria-controls="searchm" role="tab" data-toggle="tab">Search MageWorx</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="weblipscore">
+                <a href="/download/Weblips.zip" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-download-alt"></span> Загрузить</a>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="localizationjs">
+                <p class="w-warning"> модуль для локализации JS</p>
+                <p class="w-warning"> работает совместно с etws/magento-language-ru_ru</p>
+                <a href="/download/localizationjs.zip" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-download-alt"></span> Загрузить</a>
+                <p class="wl-12">Копируем фалы в корень</p>
+                <p>Теперь добавляем код в вашу тему по следующему пути:</p>
+                <p class="wl-12">app/design/frontend/vendor or Magento/you thems or blank/web/js/theme.js</p>
+                <pre>
+    <code>
+ define([
+    'jquery',
+    'mage/smart-keyboard-handler',
+    'mage/mage',
+    'mage/ie-class-fixer',
+    'mage/validation',
+    'mage/translate',
+    'domReady!'
+], function ($, keyboardHandler) {
+    'use strict';
+
+    if ($('body').hasClass('checkout-cart-index')) {
+        if ($('#co-shipping-method-form .fieldset.rates').length > 0 && $('#co-shipping-method-form .fieldset.rates :checked').length === 0) {
+            $('#block-shipping').on('collapsiblecreate', function () {
+                $('#block-shipping').collapsible('forceActivate');
+            });
+        }
+    }
+
+    $('.cart-summary').mage('sticky', {
+        container: '#maincontent'
+    });
+
+    $('.panel.header > .header.links').clone().appendTo('#store\\.links');
+
+    keyboardHandler.apply();
+    
+    // translate js weblips-hack
+    $.each($.validator.messages, function(validationMessageKey, validationMessage) {
+        if (typeof validationMessage == 'string') {
+            $.validator.messages[validationMessageKey] = $.mage.__(validationMessage);
+        }
+    });
+
+    $.validator.messages = $.extend($.validator.messages, {
+        equalTo: "Пожалуйста, убедитесь, что пароли совпадают."
+    }); 
+    // end translate js 
+});       
+    </code>
+                </pre>
+                <code>bin/magento setup:upgrade</code>
+                <br>
+                <code>rm -rf /var/di/* /var/generation/*</code>
+                <br>
+                <code>bin/magento cache:flush</code>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="searchm">
+                <p class="w-warning">Настройки в конфигурационном файле</p>
+                <a href="/download/MageWorx.zip" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-download-alt"></span> Загрузить</a>
+            </div>
+        </div>
+    </div>
+</div>

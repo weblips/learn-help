@@ -10,6 +10,7 @@
             <li role="presentation"><a href="#localization" aria-controls="localization" role="tab" data-toggle="tab">Localization</a></li>
             <li role="presentation"><a href="#dev" aria-controls="dev" role="tab" data-toggle="tab">Enable dev mod</a></li>
             <li role="presentation"><a href="#permisson" aria-controls="permisson" role="tab" data-toggle="tab">Permisson Apache</a></li>
+            <li role="presentation"><a href="#pestle" aria-controls="pestle" role="tab" data-toggle="tab">Пестик/pestle</a></li>
             <li role="presentation"><a href="#sdata" aria-controls="sdata" role="tab" data-toggle="tab">Simple Data</a></li>
             <li role="presentation"><a href="#smodule" aria-controls="smodule" role="tab" data-toggle="tab">Simple Module</a></li>
             <li role="presentation"><a href="#menum2" aria-controls="menum2" role="tab" data-toggle="tab">Menu</a></li>
@@ -2510,8 +2511,28 @@ class InstallData implements InstallDataInterface
     </code>
                 </pre>
             </div>
+            <div role="tabpanel" class="tab-pane" id="pestle">
+                <p class="wl-12">Install pestle of Alan Storm</p>
+                <pre>
+    <code>
+  curl -LO http://pestle.pulsestorm.net/pestle.phar
+    </code>
+                </pre>
+                <p class="wl-12">List command</p>
+                <pre>
+    <code>
+  php pestle.phar      
+    </code>
+                </pre>
+                <p class="wl-12">Create module</p>
+                <pre>
+    <code>
+  php pestle.phar  magento2:generate:module      
+    </code>
+                </pre>
+            </div>
             <div role="tabpanel" class="tab-pane" id="model">
-                <p class="wl-12">
+                <p class="wl-12"></p>
             </div>
         </div>
     </div>
