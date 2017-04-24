@@ -23,6 +23,7 @@
             <li role="presentation"><a href="#setupdataeav" aria-controls="setupdataeav" role="tab" data-toggle="tab">InstallData EAV</a></li>
             <li role="presentation"><a href="#schemaupdate" aria-controls="schemaupdate" role="tab" data-toggle="tab">UpgradeSchema</a></li>
             <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">Model</a></li>
+            <li role="presentation"><a href="#observer" aria-controls="observer" role="tab" data-toggle="tab">Observer</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -2533,6 +2534,98 @@ class InstallData implements InstallDataInterface
             </div>
             <div role="tabpanel" class="tab-pane" id="model">
                 <p class="wl-12"></p>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="observer">
+                <p>
+                    События в Magento 2 архитектуры помогает расширения функциональности по умолчанию это. Это флаг, который поднимается при возникновении какой-либо конкретной ситуации, например, нажмите кнопку «Отправить» кнопку на странице контактов это событие осуществляется посетителями сайта. Наблюдатель работает как слушатель, который обнаруживает события и выполняет действие, определенное в момент возникновения события.Она позволяет добавлять собственную логику в код ядра без изменения основных файлов или коды. Имея мощную картину события / наблюдателя, мы можем использовать это очень эффективно в Magento 2 пользовательских модулей.
+                </p>
+                <hr>
+                <p class="wl-12">Создаем наблюдателя события</p>
+                <pre>
+    <code>
+  etc/event.xml // для front & admin       
+  etc/frontend/event.xml // для front   
+  etc/adminhtml/event.xml // для adminhtml  
+    </code>
+                </pre>
+                <hr>
+                <p class="wl-12">Пример на основе cart</p>
+                <p>Magento 2, Magento\Framework\Event\ManagerInterface interface is responsible for dispatching the events.
+                </p>
+                <p>Magento/Checkout/Model/Cart.php</p>
+                <pre>
+    <code>
+namespace Magento\Checkout\Model;
+
+use Magento\Checkout\Model\Cart\CartInterface;
+use Magento\Framework\DataObject;
+ 
+class Cart extends DataObject implements CartInterface
+{
+    ...
+   public function save()
+   {
+       $this->_eventManager->dispatch('checkout_cart_save_before', ['cart' => $this]);
+       //Perform save cart action
+       $this->_eventManager->dispatch('checkout_cart_save_after', ['cart' => $this]);
+       return $this;
+   }
+   ...
+} 
+    </code>
+                </pre>
+                <p>WHERE:</p>
+                <p>Здесь мы диспетчерская « checkout_cart_save_before » и « checkout_cart_save_after » события и , таким образом , мы можем легко вызвать какие - либо действия до и после того, как телега сохраняется. Это помогает избежать переписывания всего класса. 
+Magento позволяет перейти значения для наблюдателей , чтобы вызвать действие на возникновение событий , как вы видели в приведенном выше примере.</p>
+                <p class="wl-12">Пользовательские события:</p>
+                <pre>
+    <code>
+ $this->_eventManager->dispatch(‘custom_action_after_save’, [‘param’ => $this]);       
+    </code>
+                </pre>
+                <p>Для отправки пользовательских событий в Magento 2, создать объект для Magento \ Framework \ Event \ ManagerInterface и передать уникальное имя пользовательского события к объекту.</p>
+                <p>здесь параметры будут не обязательными</p>
+                <h2>Отображение событий и наблюдатель:</h2>
+                <pre>
+    <code>
+<i><</i>config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+   <i><</i>event name="sales_order_place_after">
+       <i><</i>observer name="unique_observer_name" instance="Magecomp\MyModule\Observer\MyObserver" />
+   <i><</i>/event>
+<i><</i>/config>    
+    </code>
+                </pre>
+                <p class="wl-12">observer node is having following properties:</p>
+                <ul>
+                    <li>name – Observer Name that must be unique for each event.</li>
+                    <li>instance – Magento class that needs to be executed when the event is dispatched.</li>
+                    <li>disabled – To activate or deactivate the observer.</li>
+                    <li>shared – экземпляр должен быть создан общий или нет. Default is false.</li>
+                </ul>
+                <p class="wl-12">Наблюдатели:</p>
+                <p>Наблюдатели выполняются , когда отображаются события. Менеджер событий отвечает за направление событий и выполнение соответствующих наблюдателей.</p>
+                <pre>
+    <code>
+namespace MAGECOMP\MyModule\Observer;
+ 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+ 
+class MyObserver implements ObserverInterface
+{
+ 
+ public function execute(Observer $observer)
+ {
+    // get parameters passed in events
+    $cart = $observer->getData('param');
+ 
+    //Perform action
+ }
+ 
+}        
+    </code>
+                </pre>
+                Выше структура является основным классом наблюдателя. Обратите внимание , что класс Observer должен реализовать \ Magento \ Framework \ Event \ ObserverInterface . Я надеюсь , что этот блог помог вам создать и внедрить мероприятия наблюдателя в Magento 2
             </div>
         </div>
     </div>
