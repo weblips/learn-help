@@ -24,6 +24,8 @@
             <li role="presentation"><a href="#schemaupdate" aria-controls="schemaupdate" role="tab" data-toggle="tab">UpgradeSchema</a></li>
             <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">Model</a></li>
             <li role="presentation"><a href="#observer" aria-controls="observer" role="tab" data-toggle="tab">Observer</a></li>
+            <li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">View</a></li>
+            <li role="presentation"><a href="#rj" aria-controls="rj" role="tab" data-toggle="tab">RequireJS</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -2627,6 +2629,146 @@ class MyObserver implements ObserverInterface
                 </pre>
                 Выше структура является основным классом наблюдателя. Обратите внимание , что класс Observer должен реализовать \ Magento \ Framework \ Event \ ObserverInterface . Я надеюсь , что этот блог помог вам создать и внедрить мероприятия наблюдателя в Magento 2
             </div>
+            <div role="tabpanel" class="tab-pane" id="view">
+                <p class="wl-12">
+                    Create view text Alan Strm
+                </p>
+                <h2>Layout</h2>
+                <p>Your layout name is path</p>
+                <p class="wl-12">
+                    (id_router)_(controllerFolder)_(actionController).xml
+                </p>
+                <p>99,9% in routes.xml id == frontname</p>
+                create foulder view/layout/test_index_index.xml
+                <pre>
+    <code>
+        // if not found layout:
+        enable default.xml
+    </code>
+                </pre>
+                <p>Your layout:</p>
+                <pre>
+    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <i><</i>referenceBlock name="content">
+        <i><</i>block template="content.phtml" 
+               class="Pulsestorm\JavascriptCssExample\Block\Main" 
+               name="pulsestorm_javascriptcssexample_block_main" />
+    <i><</i>/referenceBlock>
+<i><</i>/page>       
+    </code>
+                </pre>
+                <p class="w-success">не имеет значения referenceBlock referenceContainer</p>
+                <p>is work too</p>
+                <pre>
+    <code>
+ <i><</i>?xml version="1.0"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <i><</i>referenceContainer name="content">
+        <i><</i>block template="content.phtml" 
+               class="Pulsestorm\JavascriptCssExample\Block\Main" 
+               name="pulsestorm_javascriptcssexample_block_main" />
+    <i><</i>/referenceContainer>
+<i><</i>/page>          
+    </code>
+                </pre>
+                <p class="wl-12">Вставка в кода PHP и привязка к блоку в head html doc</p>
+                <pre>
+    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <!-- ... -->
+    <i><</i>referenceBlock name="head.additional">
+        <i><</i>block  template="head.phtml" 
+                class="Pulsestorm\JavascriptCssExample\Block\Head" 
+                name="pulsestorm_javascriptcssexample_block_head" />
+    <i><</i>/referenceBlock>
+    <!-- ... -->
+<i><</i>/page>        
+    </code>
+                </pre>
+                <p class="wl-12">
+                    шаблон можно modify:
+                </p>
+                <pre>
+    <code>
+<i><</i>?xml version="1.0"?>
+<i><</i>page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <i><</i>head>
+    <i><</i>title>Hello<i><</i>/title>
+        <i><</i>meta name="viewport" content="width=1024, initial-scale=1"/>
+        <i><</i>css src="Pulsestorm_JavascriptCssExample::test.css"/>
+        <i><</i>link src="Pulsestorm_JavascriptCssExample::test.js"/>
+    <i><</i>/head>
+    <i><</i>referenceBlock name="content">
+        <i><</i>block template="content.phtml" class="Pulsestorm\JavascriptCssExample\Block\Main" name="pulsestorm_javascriptcssexample_block_main" />
+    <i><</i>/referenceBlock>
+<i><</i>/page>
+    </code>
+                </pre>
+                <p class="wl-12">Подключение css/js</p>
+                <pre>
+    <code>
+ <i><</i>css src="Pulsestorm_JavascriptCssExample::test.css"/>
+ <i><</i>link src="Pulsestorm_JavascriptCssExample::test.js"/>       
+    </code>
+                </pre>
+                <p class="w-success">
+                    Pulsestorm_JavascriptCssExample::test.css <br>
+                    Говорит что файл находиться в папке view/web/ модуля
+                </p>
+                <p>Если указано 
+                    <br>
+                    link src="test.js"
+                    <br>
+                    <span style="color: #00b3ee">то данный файл будет искаться в папке активной темы!!!!</span>
+                </p>
+                <h2>Набор тегов для head in layout:</h2>
+                <pre style="background: #f99b15">
+    <code style="font-size: 20px">
+        <i><</i>attribute/>, <i><</i>css/>, <i><</i>link/>, <i><</i>meta/>, <i><</i>remove/>, <i><</i>script/>, <i><</i>title/>       
+    </code>
+                </pre>
+                <span style="font-size: 20px; color: red">head.additional</span> - автоматически выводится в head
+                <p>вывод прямой ссылки с помощью блока</p>
+                <p>templates/header.phtml</p>
+                <pre>
+    <code>
+<i><</i>?php
+    $asset_repository = $this->assetRepository;
+    $asset  = $asset_repository->createAsset('Pulsestorm_JavascriptCssExample::test.js');
+    $url    = $asset->getUrl();
+?>
+<!-- Hello There -->
+<i><</i>script src="<i><</i>?php echo $url; ?>"><i><</i>/script>
+    </code>
+                </pre>
+                <p>di $assetRepository into Block/Head.php</p>
+                <pre>
+    <code>
+<i><</i>?php
+namespace Pulsestorm\JavascriptCssExample\Block;
+class Head extends \Magento\Framework\View\Element\Template
+{
+    public $assetRepository;
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        array $data = [],
+        \Magento\Framework\View\Asset\Repository $assetRepository
+    )
+    {
+        $this->assetRepository = $assetRepository;
+        return parent::__construct($context, $data);
+    }
+}
+    </code>
+                </pre>
+                <p>Получаем прямую ссылку на сss/js into head html document</p>
+            </div>
+             <div role="tabpanel" class="tab-pane" id="rj">
+                 <p>RequireJS является Java - модульная система. Он реализует асинхронный модуль определения (AMD) стандарт для яваскрипта модулей.</p>
+             </div>
         </div>
     </div>
 </div>
