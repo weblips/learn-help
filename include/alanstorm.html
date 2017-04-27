@@ -1,0 +1,138 @@
+<div>
+    <h3><b>Alan Storm</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">Model Crud</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="model">
+                <p>Установка из Setup/InstallSchema.php</p>
+                <code>table : setup_module</code>
+                <p class="wl-12">Setup/InstallSchema.php</p>
+                <pre>
+    <code>
+<i><</i>?php
+namespace Pulsestorm\ToDoCrud\Setup;
+class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
+{
+    public function install(\Magento\Framework\Setup\SchemaSetupInterface $setup, \Magento\Framework\Setup\ModuleContextInterface $context)
+    {
+        $installer = $setup;
+        $installer->startSetup();
+        //START: install stuff
+        //END:   install stuff
+        
+        //START table setup
+        $table = $installer->getConnection()->newTable(
+            $installer->getTable('pulsestorm_todocrud_todoitem')
+        )->addColumn(
+            'pulsestorm_todocrud_todoitem_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            [ 'identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true, ],
+            'Entity ID'
+        )->addColumn(
+            'title',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [ 'nullable' => false, ],
+            'Demo Title'
+        )->addColumn(
+            'creation_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            [ 'nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT, ],
+            'Creation Time'
+        )->addColumn(
+            'update_time',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            null,
+            [ 'nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE, ],
+            'Modification Time'
+        )->addColumn(
+            'is_active',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            [ 'nullable' => false, 'default' => '1', ],
+            'Is Active'
+        );
+        $installer->getConnection()->createTable($table);
+        //END   table setup
+$installer->endSetup();
+    }
+}
+    </code>
+                </pre>
+                <pre style="background: #79740e; font-size: 16px">
+    <code>
+        // Создаст следующие столбцы
+        pulsestorm_todocrud_todoitem_id  - primary key
+        title
+        creation_time
+        update_time
+        is_active
+    </code>
+                </pre>
+                <h3>Получили 4-е конфигурации : </h3>
+                <code>1. Основная модель Pulsestorm/ToDoCrud/Model/ToDoItems.php </code>
+                <code> - основная задача это функционал и реализация interface </code>
+                <pre>
+    <code>
+namespace Pulsestorm\ToDoCrud\Model;
+class TodoItem extends \Magento\Framework\Model\AbstractModel 
+implements TodoItemInterface, \Magento\Framework\DataObject\IdentityInterface
+{
+    const CACHE_TAG = 'pulsestorm_todocrud_todoitem';
+
+    protected function _construct()
+    {
+        $this->_init('Pulsestorm\ToDoCrud\Model\ResourceModel\TodoItem');
+    }
+
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+}       
+    </code>
+                </pre>
+                <p>CACHE_TAG - это кеш добавляемый к запросу</p>
+                <p>реализует стандартный интерфейс IdentityInterface</p>
+                <p>В конструкторе запускаем ResourceModel\TodoItem который выполняет CRUD</p>
+                <p>Также можем задать ннтерфейс для подкл. по API (TodoItemInterface) , который находиться в Api/Data/TodoItemInterface.php<br>
+                В данный момент он пуст и не имеет ни каких методов для implement
+                </p>
+                <code>2. Ресурс: находиться в папке ResourceModel/TodoItem.php и именуется как осн. модель такое же имя</code>
+                <p>ресурсы занимаются только CRUD sql для DB</p>
+                <p>Каждый ресурс имеет свою модель и наоборот</p>
+                <pre>
+    <code>
+namespace Pulsestorm\ToDoCrud\Model\ResourceModel;
+class TodoItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+{
+    protected function _construct()
+    {
+        $this->_init('pulsestorm_todocrud_todoitem','pulsestorm_todocrud_todoitem_id');
+    }
+}       
+    </code>
+                </pre>
+               <pre style="background: #79740e; font-size: 16px">
+    <code>
+        - каждый ресурс расширяет Magento\Framework\Model\ResourceModel\Db\AbstractDb
+        содержит основную логику для извлечения информации из одной таблицы базы данных.
+        - ресурс должен вызвать конструктор базовой DB и вызвать метод 
+        $this->_init('pulsestorm_todocrud_todoitem','pulsestorm_todocrud_todoitem_id')
+        где первый параметр имя таблицы, а 2 - идентификатор
+    </code>
+                </pre> 
+            </div>
+        </div>
+    </div>
+</div>
