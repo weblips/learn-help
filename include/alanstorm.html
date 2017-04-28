@@ -9,6 +9,7 @@
             <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">Model Crud</a></li>
             <li role="presentation"><a href="#factory" aria-controls="factory" role="tab" data-toggle="tab">Откуда появляются Factory</a></li>
             <li role="presentation"><a href="#registry" aria-controls="registry" role="tab" data-toggle="tab">Objact Repositores/Хранилище объектов</a></li>
+            <li role="presentation"><a href="#aform" aria-controls="aform" role="tab" data-toggle="tab">Advance Routing</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -296,6 +297,93 @@ function _prepareLayout() {
                     <li>для извлечения и сохранения объектов.</li>
                 </ul>
                 <p class="w-warning">прямое использование диспетчера объектов не рекомендуются!!!</p>
+                <p class="wl-12">Command/Examples.php</p>
+                <pre>
+    <code>
+namespace Pulsestorm\RepositoryTutorial\Command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class Examples extends Command
+{
+    protected function configure()
+    {
+        $this->setName("ps:examples");
+        $this->setDescription("A command the programmer was too lazy to enter a description for.");
+        parent::configure();
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln("Hello World");  
+    }
+}         
+    </code>
+                </pre>
+                <p>в консоли появилась новая команда</p>
+                <p> bin/magento ps:examples</p>
+                <p>также появилось ее описание в list cli</p>
+                <p class="wl-12">даем доступ к менеджеру объекта</p>
+                <pre>
+    <code>
+#File: app/code/Pulsestorm/RepositoryTutorial/Command/Examples.php
+class Examples extends Command
+{
+    protected $objectManager;
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\App\State $appState,
+        $name=null
+    )
+    {
+        $this->objectManager = $objectManager;
+        $appState->setAreaCode('frontend');
+        parent::__construct($name);
+    }
+}        
+    </code>
+                </pre>
+                <ul>
+                    <li>автоматическую инъекцию конструктор зависимостей для вставки экземпляра менеджера объекта</li>
+                    <li>автоматическую инъекцию конструктора зависимостей , чтобы вставить Magento\Framework\App\State <br>чтобы обойти проблемы с областями</li>
+                </ul>
+                <pre>
+    <code>
+protected function execute(InputInterface $input, OutputInterface $output)
+{
+    $repo = $this->objectManager->get('Magento\Catalog\Model\ProductRepository');
+    $page = $repo->getById(2);        
+    echo get_class($page),"\n";
+}        
+    </code>
+                </pre>
+                <h1>Начало работы с хранилищами:</h1>
+                <ul>
+                    <li>хранилище является еще одним объектом</li>
+                    <li>Для каждого «бизнес - объекта» (продукт, категория, CMS страницы, и т.д.), есть один соответствующий объект хранилища</li>
+                    <li>CMS страницы хранить все данные (содержание, название, дополнительные правила разметки и т.д.) , связанные с одной страницы в Magento встроенный в CMS</li>
+                </ul>
+                <p class="big">Объект хранилища для объектов CMS является:</p>
+                Magento\Cms\Model\PageRepository объектом. Вы можете использовать этот объект для загрузки CMS страницы, его идентификатором, с getByIdметодом.
+                <pre>
+    <code>
+#File: app/code/Pulsestorm/RepositoryTutorial/Command/Examples.php
+
+$repo = $this->objectManager->get('Magento\Cms\Model\PageRepository');
+$page = $repo->getById(2);
+
+echo $page->getTitle(),"\n";         
+    </code>
+                </pre>
+Если у вас есть объект CMS страница в системе с идентификатором 2, приведенный выше код выведет его название.
+
+Когда вы ищете для соответствующего объекта хранилища бизнес - объекта, нет ничего формального в системе , которая связывает конкретное хранилище для конкретного объекта. Вообще говоря , хотя, паттерн , добавляя Repositoryк имени базового бизнес - класса объект имеет
+            </div>
+            <div role="tabpanel" class="tab-pane" id="aform">
+                <p class="big">Advance Routing </p>
+                <hr>
             </div>
         </div>
     </div>
