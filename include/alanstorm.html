@@ -7,6 +7,8 @@
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
             <li role="presentation"><a href="#model" aria-controls="model" role="tab" data-toggle="tab">Model Crud</a></li>
+            <li role="presentation"><a href="#factory" aria-controls="factory" role="tab" data-toggle="tab">Откуда появляются Factory</a></li>
+            <li role="presentation"><a href="#registry" aria-controls="registry" role="tab" data-toggle="tab">Objact Repositores/Хранилище объектов</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -129,9 +131,171 @@ class TodoItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         содержит основную логику для извлечения информации из одной таблицы базы данных.
         - ресурс должен вызвать конструктор базовой DB и вызвать метод 
         $this->_init('pulsestorm_todocrud_todoitem','pulsestorm_todocrud_todoitem_id')
-        где первый параметр имя таблицы, а 2 - идентификатор
+        где первый параметр имя таблицы,
+        2 - идентификатор название столбца (id) в нашем случае pulsestorm_todocrud_todoitem_id
     </code>
                 </pre> 
+                <p style="font-size: 16px" class="wl-12">
+                    3. Коллекции
+                </p>
+                <p>
+                    бывают случаи , когда вы хотите , чтобы принести несколько моделей определенного типа
+                    Коллекция собирает индивидуальные модели
+                </p>
+                <p class="wl-12">app/code/Pulsestorm/ToDoCrud/Model/ResourceModel/TodoItem/Collection.php</p>
+                <pre>
+    <code>
+namespace Pulsestorm\ToDoCrud\Model\ResourceModel\TodoItem;
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+{
+    protected function _construct()
+    {
+        $this->_init('Pulsestorm\ToDoCrud\Model\TodoItem','Pulsestorm\ToDoCrud\Model\ResourceModel\TodoItem');
+    }
+}        
+    </code>
+                </pre>
+                <p>класс Collection расширяет аб.класс AbstractCollection</p>
+                <p>коллекция используется для полючения всех результатов из столбца</p>
+                <p>Ресурс модель коллекции _init метод принимает два аргумента. Первым из них является модель , которая собирает эту коллекцию. Во - вторых, модель ресурса , собранные модели.</p>
+                <h1>Использование Модели в Block. Требуется:</h1>
+                <p class="wl-12">
+                    1. di автоматическую инъекцию в конструктор Block <br>
+                    2. впрыснуть фабричный объект, а затем использовать объект фабрики для создания экземпляра нашей модели 
+                </p>
+                <p class="wl-12">
+                    Все названия фабрики класса являются имя класса модели, добавляется слово «Фабрика»:
+                    <br>модель: Pulsestorm/ToDoCrud/Model/TodoItem<br>
+                    ее фабрика: Pulsestorm/ToDoCrud/Model/TodoItemFactory
+                </p>
+                <pre>
+    <code>
+namespace Pulsestorm\ToDoCrud\Block;
+class Main extends \Magento\Framework\View\Element\Template
+{
+    protected $toDoFactory;
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Pulsestorm\ToDoCrud\Model\TodoItemFactory $toDoFactory
+    )
+    {
+        $this->toDoFactory = $toDoFactory;
+        parent::__construct($context);
+    }
+
+    function _prepareLayout() {
+        $todo = $this->toDoFactory->create();
+        $todo->setData('item_text', 'Finish my Magento article')
+                ->save();
+        var_dump('Done');
+        exit;
+    }
+
+}        
+    </code>
+                </pre>
+                <p>Таким образом мы впрыснули фабрику модели и сохранили в базе новое поле с 
+                item_text (таблицы "pulsestorm_todocrud_todoitem" )
+                </p>
+                <p class="wl-12">Получение и тп выведено в отдельные методы:</p>
+                <pre>
+    <code>
+namespace Pulsestorm\ToDoCrud\Block;
+class Main extends \Magento\Framework\View\Element\Template
+{
+    protected $toDoFactory;
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Pulsestorm\ToDoCrud\Model\TodoItemFactory $toDoFactory
+    )
+    {
+        $this->toDoFactory = $toDoFactory;
+        parent::__construct($context);
+    }
+
+    function _prepareLayout() {
+        $todo = $this->toDoFactory->create();
+        $todo->setData('item_text', 'Finish my Magento article7777')
+                ->save();
+        $this->myGet();
+        $this->getMyALL();
+        var_dump('Done');
+        exit;
+    }
+    public function myGet() {
+        $todo = $this->toDoFactory->create();
+        $todo = $todo->load(3);
+        var_dump($todo->getData());
+    }
+    
+    public function getMyALL(){
+    $todo = $this->toDoFactory->create();
+    $todo = $todo->load(1);        
+    var_dump($todo->getData());
+    var_dump($todo->getItemText());
+    var_dump($todo->getData('item_text'));
+    }
+}        
+    </code>
+                </pre>
+                <h2>Работа с коллекцией в Block</h2>
+                <p>Для работы с коллекцией используется та же фабрика</p>
+                <pre>
+    <code>
+function _prepareLayout() {
+        $todo = $this->toDoFactory->create();
+        $todo->setData('item_text', 'Finish my Magento article7777')
+                ->save();
+        $this->myGet();
+        $this->getMyALL();
+        $this->getMyCollection();
+        var_dump('Done');
+        exit;
+    }
+    public function myGet() {
+        $todo = $this->toDoFactory->create();
+        $todo = $todo->load(3);
+        var_dump($todo->getData());
+    }
+    
+    public function getMyALL(){
+    $todo = $this->toDoFactory->create();
+    $todo = $todo->load(1);        
+    var_dump($todo->getData());
+    var_dump($todo->getItemText());
+    var_dump($todo->getData('item_text'));
+    }
+    
+ // Это коллекция   
+    public function getMyCollection() {
+        $todo = $this->toDoFactory->create();
+        $collection = $todo->getCollection();
+        foreach ($collection as $item) {
+            var_dump('Item ID: ' . $item->getId());
+            var_dump($item->getData());
+        }
+    }        
+    </code>
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="factory">
+                <h2>Откуда появляются Factory</h2>
+                <hr>
+                <p>Всякий раз , когда диспетчер объектов Magento в встречает имя класса , который заканчивается в слове Factory, он будет автоматически генерировать класс в var/generation (при условии, что он не создан).Т.е:</p>
+                <p class="wl-12">Pulsestorm\ToDoCrud\Model</p>
+                <p>ее фабрика будет создаваться:</p>
+                <p class="wl-12">var/generation/Pulsestorm/ToDoCrud/Model/TodoItemFactory.php</p>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="registry">
+                <h2>Objact Repositores/Хранилище объектов</h2>
+                <hr>
+                <p> Осн. функции хранилища объектов это: </p>
+                <ul>
+                    <li>отвечает за чтение и написания информации об объекте в хранилище объектов (то есть база данных, файловая система, физическая память и т.д.)</li>
+                    <li>необходимы для отображения объектов данных (или «бизнес - объекты») в виртуальной / машинной памяти.</li>
+                    <li>для извлечения и сохранения объектов.</li>
+                </ul>
+                <p class="w-warning">прямое использование диспетчера объектов не рекомендуются!!!</p>
             </div>
         </div>
     </div>
