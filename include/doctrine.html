@@ -1,0 +1,83 @@
+<div>
+    <h3><b>Learn Doctrine</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#doctrine" aria-controls="doctrine" role="tab" data-toggle="tab">положение</a></li>
+            <li role="presentation"><a href="#install" aria-controls="install" role="tab" data-toggle="tab">установка</a></li>
+            <li role="presentation"><a href="#conf" aria-controls="conf" role="tab" data-toggle="tab">Конфигурация</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="doctrine">
+                <p>Doctrine 1 (php5.3+)</p>
+                <p>Doctrine версии 1.* следует паттерну Active Record для работы с данными[1]. Для примера, если программист хочет создать пользователя в базе данных, он может больше не использовать SQL, а написать следующий PHP код:</p>
+                <pre>
+                    <code>
+ $user = new User();
+ $user->name = "john";
+ $user->password = "doe";
+ $user->save();
+ echo "The user with id $user->id has been saved.";
+                    </code>
+                </pre>
+                <p>Doctrine 2 (php5.4+)</p>
+                <p>Doctrine версии 2.* следует паттерну Data mapper . Для создания пользователя может использоваться следующий код</p>
+                <pre>
+                    <code>
+ $user = new User();
+ $user->setName("john");
+ $user->setPassword("doe");
+ $entityManager->persist($user);
+ $entityManager->flush();
+ echo "The user with id " . $user->getId() . "has been saved.";
+                    </code>
+                </pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="install">
+                <p>Install whith composer</p>
+                //create composer.json
+                <pre><code>
+{
+    "require": {
+        "doctrine/orm": "2.4.*",
+        "symfony/yaml": "2.*"
+    },
+    "autoload": {
+        "psr-0": {"": "src/"}
+    }
+}
+                </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="conf">
+                <p>Configuration to mysql </p>
+                <pre><code>
+                    // bootstrap.php
+require_once "vendor/autoload.php";
+
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+
+$paths = array("/path/to/entity-files");
+$isDevMode = false;
+
+// the connection configuration
+$dbParams = array(
+    'driver'   => 'pdo_mysql',
+    'user'     => 'root',
+    'password' => '',
+    'dbname'   => 'wl_weblips_db',
+);
+
+$config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
+$entityManager = EntityManager::create($dbParams, $config);
+                </code></pre>
+            </div>
+        </div>
+    </div>
+</div>
