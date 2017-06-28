@@ -1,0 +1,383 @@
+<div>
+    <h3><b>PDO</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#pdo" aria-controls="pdo" role="tab" data-toggle="tab">PDO</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="pdo">
+                <h2>Абстракция</h2>
+
+Представим, что мы уже продолжительное время разрабатываем приложение, с использованием MySQL. И вот, в один прекрасный момент, появляется необходимость заменить MySQL на PostgreSQL.
+
+Как минимум, нам придется заменить все вызовы mysqli_connect() (mysql_connect()) на pg_connect() и, по аналогии, другие функции, используемые для запроса и обработки данных.
+
+При использовании PDO, мы ограничимся изменением нескольких параметров в файлах конфигурации.
+
+Связывание параметров
+
+Использование связанных параметров предоставляет большую гибкость в составлении запросов и позволяет улучшить защиту от SQL инъекций.
+
+Получение данных в виде объектов
+
+Те, кто уже использует ORM (object-relational mapping — объектно-реляционное отображение данных), например, Doctrine, знают удобство представления данных из таблиц БД в виде объектов. PDO позволяет получать данные в виде объектов и без использования ORM.
+
+Расширение mysql больше не поддерживается
+
+Поддержка расширения mysql окончательно удалена из нового PHP 7. Если вы планируете переносить проект на новую версию PHP, уже сейчас следует использовать в нем, как минимум, mysqli. Конечно же, лучше начинать использовать PDO, если вы еще не сделали этого.
+
+Мне кажется, что этих причин достаточно для склонения весов в сторону использования PDO. Тем более, не нужно ничего дополнительно устанавливать.
+
+Проверяем наличие PDO в системе
+
+Версии PHP 5.5 и выше, чаще всего, уже содержать расширение для работы с PDO. Для проверки достаточно выполнить в консоли простую команду:
+
+<code>
+php -i | grep 'pdo'
+1
+php -i | grep 'pdo'
+Либо найти информацию в выводе встроенной PHP функции phpinfo(). Создадим для этого простой скрипт:
+
+</code>
+
+<h2>Знакомимся с PDO</h2>
+
+Процесс работы с PDO не слишком отличается от традиционного. В общем случае, процесс использования PDO выглядит так:
+
+Подключение к базе данных;
+По необходимости, подготовка запроса и связывание параметров;
+Выполнение запроса.
+Подключение к базе данных
+
+Для подключения к базе данных нужно создать новый объект PDO и передать ему имя источника данных, так же известного как DSN.
+
+В общем случае, DSN состоит из имени драйвера, отделенного двоеточием от строки подключения, специфичной для каждого драйвера PDO.
+
+Для MySQL, подключение выполняется так:
+
+<pre><code>
+$connection = new PDO('mysql:host=localhost;dbname=mydb;charset=utf8', 'root', 'root');
+$connection = new PDO('mysql:host=localhost;dbname=mydb;charset=utf8', 'root', 'root');
+В данном случае, DSN содержит имя драйвера mysql, указание хоста (возможен формат host=ИМЯ_ХОСТА:ПОРТ), имя базы данных, кодировка, имя пользователя  MySQL и его пароль.
+</code></pre>
+Запросы
+
+В отличие от mysqli_query(), в PDO есть два типа запросов:
+
+Возвращающие результат (select, show);
+Не возвращающие результат (insert, detele и другие).
+Первым делом, рассмотрим второй вариант.
+
+Выполнение запросов
+
+Рассмотрим пример выполнения запроса на примере insert.
+
+<pre><code>
+$connection->exec('INSERT INTO users VALUES (1, "somevalue"');
+$connection->exec('INSERT INTO users VALUES (1, "somevalue"');
+</code></pre>
+Конечно же, данный запрос возвращает количество затронутых строк и увидеть его можно следующим образом.
+
+<pre><code>
+$affectedRows = $connection->exec('INSERT INTO users VALUES (1, "somevalue"');
+echo $affectedRows;
+$affectedRows = $connection->exec('INSERT INTO users VALUES (1, "somevalue"');
+echo $affectedRows;
+</code></pre>
+Получение результатов запроса
+
+В случае использования mysqli_query(), код мог бы быть следующим.
+
+<pre><code>
+$result = mysql_query('SELECT * FROM users');
+
+while($row = mysql_fetch_assoc($result)) {
+    echo $row['id'] . ' ' . $row['name'];
+}
+$result = mysql_query('SELECT * FROM users');
+ 
+while($row = mysql_fetch_assoc($result)) {
+    echo $row['id'] . ' ' . $row['name'];
+}
+Для PDO, код будет проще и лаконичнее.
+
+
+foreach($connection->query('SELECT * FROM users') as $row) {
+    echo $row['id'] . ' ' . $row['name'];
+}
+
+foreach($connection->query('SELECT * FROM users') as $row) {
+    echo $row['id'] . ' ' . $row['name'];
+}
+</code></pre>
+Режимы получения данных
+
+Как и в mysqli, PDO позволяет получать данные в разных режимах. Для определения режима, класс PDO содержит соответствующие константы.
+<br>
+<code>
+PDO::FETCH_ASSOC — возвращает массив, индексированный по имени столбца в таблице базы данных;
+PDO::FETCH_NUM — возвращает массив, индексированный по номеру столбца;
+PDO::FETCH_OBJ — возвращает анонимный объект с именами свойств, соответствующими  именам столбцов. Например, $row->id будет содержать значение из столбца id.
+PDO::FETCH_CLASS — возвращает новый экземпляр класса, со значениями свойств, соответствующими данным из строки таблицы. В случае, если указан параметр PDO::FETCH_CLASSTYPE (например PDO::FETCH_CLASS | PDO::FETCH_CLASSTYPE), имя класса будет определено из значения первого столбца.
+Примечание: это не полный список, все возможные константы и варианты их комбинации доступны в документации
+</code>
+Пример получения ассоциативного массива:
+
+<pre><code>
+$statement = $connection->query('SELECT * FROM users');
+
+while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+    echo $row['id'] . ' ' . $row['name'];
+}
+
+$statement = $connection->query('SELECT * FROM users');
+ 
+while($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+    echo $row['id'] . ' ' . $row['name'];
+}
+Примечание: Рекомендуется всегда указывать режим выборки, так как режим PDO::FETCH_BOTH потребует вдвое больше памяти — фактически, будут созданы два массива, ассоциативный и обычный.
+
+Рассмотрим использование режима выборки PDO::FETCH_CLASS. Создадим класс User:
+
+
+class User
+{
+    protected $id;
+    protected $name;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+}
+
+class User
+{
+    protected $id;
+    protected $name;
+ 
+    public function getId()
+    {
+        return $this->id;
+    }
+ 
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+ 
+    public function getName()
+    {
+        return $this->name;
+    }
+ 
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+}
+</pre></code>
+Теперь выберем данные и отобразим данные при помощи методов класса:
+
+<pre><code>
+$statement = $connection->query('SELECT * FROM users');
+
+while($row = $statement->fetch(PDO::FETCH_CLASS, 'User')) {
+    echo $row->getId() . ' ' . $row->getName();
+}
+
+$statement = $connection->query('SELECT * FROM users');
+ 
+while($row = $statement->fetch(PDO::FETCH_CLASS, 'User')) {
+    echo $row->getId() . ' ' . $row->getName();
+}
+</code></pre>
+Подготовленные запросы и связывание параметров
+
+Для понимания сути и всех преимуществ связывания параметров нужно более подробно рассмотреть механизмы PDO. При вызове $statement->query() в коде выше, PDO подготовит запрос, выполнит его и вернет результат.
+<br>
+При вызове $connection->prepare() создается подготовленный запрос. Подготовленные запросы — это способность системы управления базами данных получить шаблон запроса, скомпилировать его и выполнить после получения значений переменных, использованных в шаблоне. Похожим образом работают шаблонизаторы Smarty и Twig.
+<br>
+При вызове $statement->execute() передаются значения для подстановки в шаблон запроса и СУБД выполняет запрос. Это действие аналогично вызову функции шаблонизатора render().
+<br>
+Пример использования подготовленных запросов в PHP PDO:
+
+<code>
+$statement = $connection->prepare('Select * From users Where id = :id');
+$statement = $connection->prepare('Select * From users Where id = :id');
+</code>
+В коде выше подготовлен запрос выборки записи с полем id равным значению, которое будет подставлено вместо :id.  На данном этапе СУБД выполнит анализ и компиляцию запроса, возможно с использованием кеширования (зависит от настроек).
+<br>
+Теперь нужно передать недостающий параметр и выполнить запрос:
+
+<br>
+<pre><code>
+$id = 5;
+$statement->execute([
+    ':id' => $id
+]);
+
+$id = 5;
+$statement->execute([
+    ':id' => $id
+]);
+И получить данные:
+
+
+$results = $statement->fetchAll(PDO::FETCH_OBJ);
+$results = $statement->fetchAll(PDO::FETCH_OBJ);
+</code></pre>
+Преимущества использования связанных параметров
+<br>
+Возможно, после рассмотрения механизма работы подготовленных запросов и связанных параметров, преимущества их использования стали очевидными.
+<br>
+PDO предоставляет удобную возможность экранирования пользовательских данных, например, такой код больше не нужен:
+
+<pre><code>
+$results = mysql_query(sprintf("SELECT * FROM users WHERE name='%s'", 
+        mysql_real_escape_string($name)
+    )
+) or die(mysql_error());
+
+$results = mysql_query(sprintf("SELECT * FROM users WHERE name='%s'", 
+        mysql_real_escape_string($name)
+    )
+) or die(mysql_error());
+Вместо этого, теперь целесообразно делать так:
+
+
+$statement = $connection->prepare('Select * FROM users WHERE name = :name');
+$results = $connection->execute([
+    ':name' => $name
+]);
+
+$statement = $connection->prepare('Select * FROM users WHERE name = :name');
+$results = $connection->execute([
+    ':name' => $name
+]);
+Можно, даже, еще укоротить код, используя нумерованные параметры вместо именованных:
+
+
+$statement = $connection->prepare('SELECT * FROM users WHERE name = ?');
+$results = $connection->execute([$name]);
+
+$statement = $connection->prepare('SELECT * FROM users WHERE name = ?');
+$results = $connection->execute([$name]);
+</code></pre>
+В тоже время, использование подготовленных запросов позволяет улучшить производительность при многократном использовании запроса по одному шаблону. Пример выборки пяти случайных пользователей из базы данных:
+
+<pre><code>
+$numberOfUsers = $connection->query('SELECT COUNT(*) FROM users')->fetchColumn();
+$users = [];
+$statement = $connection->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+
+for ($i = 1; $i <= 5; $i++) {
+    $id = rand(1, $numberOfUsers);
+    $users[] = $statement->execute([$id])->fetch(PDO::FETCH_OBJ);
+}
+
+$numberOfUsers = $connection->query('SELECT COUNT(*) FROM users')->fetchColumn();
+$users = [];
+$statement = $connection->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+ 
+for ($i = 1; $i <= 5; $i++) {
+    $id = rand(1, $numberOfUsers);
+    $users[] = $statement->execute([$id])->fetch(PDO::FETCH_OBJ);
+}
+</code></pre>
+При вызове метода prepare(), СУБД проведет анализ и скомпилирует запрос, при необходимости использует кеширование. Позже, в цикле for, происходит только выборка данных с указанным параметром. Такой подход позволяет быстрее получить данные, уменьшив время работы приложения.
+
+При получении общего количества пользователей в базе данных был использован метод fetchColumn(). Этот метод позволяет получить значение одного столбца и является полезным при получении скалярных значений, таких как количество, сумма, максимально или минимальное значения.
+
+Связанные значения и оператор IN
+
+Часто, при начале работы с PDO, возникают трудности с оператором IN. Например, представим, что пользователь вводит несколько имен, разделенных запятыми. Пользовательский ввод хранится в переменной $names:
+
+$names = explode(',', $names);
+НЕ корректный код:
+
+<pre><code>
+$statement = $connection->prepare('SELECT * FROM users WHERE name IN (:names)');
+$statement->execute([':names' => $names]);
+$statement = $connection->prepare('SELECT * FROM users WHERE name IN (:names)');
+$statement->execute([':names' => $names]);
+</code></pre>
+Этот код не будет работать потому, что параметр в шаблоне представлен скалярным значением (например, целое число или строка).
+
+Правильным подходом будет создание специальной строки:
+
+<pre><code>
+$names = explode(',', $names);
+$placeholder = implode(',', array_fill(0, count($names), '?'));
+
+$statement = $connection->prepare("SELECT * FROM users WHERE name IN ($placeholder)");
+$statement->execute([$names]);
+$names = explode(',', $names);
+$placeholder = implode(',', array_fill(0, count($names), '?'));
+ 
+$statement = $connection->prepare("SELECT * FROM users WHERE name IN ($placeholder)");
+$statement->execute([$names]);
+</code></pre>
+Как видно из код, в строке 2 создаем массив размером как $names и заполняем его символами ?, а затем, формируем из него строку, содержащую элементы массива, разделенные запятыми.  В результате получается строка наподобие ?,?,?,?. При передаче массива $names в методе execute(), первый элемент массива будет сопоставлен первому знаку вопроса, второй второму и так далее.
+
+<p>Типизированные связанные параметры</p>
+
+Рассмотренные выше примеры были намеренно упрощены и не содержали указания типов параметров. Однако, в реальном коде лучше использовать указание типов.
+
+Читабельность. Для читающих код проще будет его понять;
+Обслуживаемость. Знание типов передаваемых параметров упрощает отладку кода. Например, при передаче строкового значения в параметр, который ожидает целое число, вызовет соответствующую ошибку;
+Ускорение. Явное указание типа параметра избавляет СУБД от необходимости приведения типов.
+Для явного указания типов параметров лучше использовать метод bindValue(). Например,
+
+<pre><code>
+$numberOfUsers = $connection->query('SELECT COUNT(*) FROM users')->fetchColumn();
+$users = [];
+$statement = $connection->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+
+for ($i = 1; $i <= 5; $i++) {
+    $id = rand(1, $numberOfUsers);
+    $statement->bindValue(1, $id, PDO::PARAM_INT);
+    $statement->execute();
+    $users[] = $statement->fetch(PDO::FETCH_OBJ);
+}
+
+$numberOfUsers = $connection->query('SELECT COUNT(*) FROM users')->fetchColumn();
+$users = [];
+$statement = $connection->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+ 
+for ($i = 1; $i <= 5; $i++) {
+    $id = rand(1, $numberOfUsers);
+    $statement->bindValue(1, $id, PDO::PARAM_INT);
+    $statement->execute();
+    $users[] = $statement->fetch(PDO::FETCH_OBJ);
+}
+</code></pre>
+В коде выше параметр определен в вызове метода bindValue(), а метод execute() вызывается без параметров.
+<br>
+Примечание: В примере выше, первым параметром метода bindValue(), является 1. При использовании именованных параметров, первым параметром передается соответствующее имя переменной в шаблоне. В противном случае. первым параметром передается порядковый номер переменной в шаблоне. Обратите внимание, что нумерация начинается с 1, а не с 0!
+            </div>
+        </div>
+    </div>
+</div>
