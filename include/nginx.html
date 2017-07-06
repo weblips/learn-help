@@ -1,0 +1,161 @@
+<div>
+    <h3><b>Nginx</b></h3>
+</div>
+<div class="content-page">
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Общее</a></li>
+            <li role="presentation"><a href="#start" aria-controls="start" role="tab" data-toggle="tab">About Nginx</a></li>
+            <li role="presentation"><a href="#host" aria-controls="host" role="tab" data-toggle="tab">Config first host</a></li> 
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home"></div>
+            <div role="tabpanel" class="tab-pane" id="start">
+                <p>Nginx</p>
+                <p class="wl-12">look dimon nginx</p>
+                <code>
+                    sudo netstat -ntlp | grep nginx
+                </code>
+                <pre>
+                    <code>
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      866/nginx -g daemon
+tcp6       0      0 :::80                   :::*                    LISTEN      866/nginx -g daemon
+
+                    </code>
+                </pre>
+                <p class="wl-12">comands for control</p>
+                <pre>
+                    <code>
+                        sudo service nginx start
+                        sudo service nginx status
+                        sudo service nginx stop
+                    </code>
+                </pre>
+                <p class="wl-12">When it lives</p>
+                <pre>
+                    <code>
+                        /etc/nginx/
+// err log + acc
+                        /var/log/nginx/
+// congig
+                       /etc/nginx/nginx.conf 
+                    </code>
+                </pre>
+                <p class="wl-12">How it works</p>
+                <pre>
+                    <code>
+                    master // setup only root
+                    -------
+                       |
+                workers 1 workers2 workers3 workers4    // setup nginx by default (4) in config nginx (param: auto)
+                --------- -------- -------- --------
+----------
+- client - -->                                          --> SERVER
+----------
+                    </code>
+                </pre>
+                <p class="wl-12">nginx.conf</p>
+                <pre>
+                    <code>
+user www-data;          // user how setup workers
+worker_processes auto;  // you may activate worker 6;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 768;
+    # multi_accept on;
+}
+
+http {
+
+    ##
+    # Basic Settings
+    ##
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    # server_tokens off;
+
+    # server_names_hash_bucket_size 64;
+    # server_name_in_redirect off;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ##
+    # SSL Settings
+    ##
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+    ssl_prefer_server_ciphers on;
+
+    ##
+    # Logging Settings
+    ##
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    ##
+    # Gzip Settings
+    ##
+
+    gzip on;
+    gzip_disable "msie6";
+
+    # gzip_vary on;
+    # gzip_proxied any;
+    # gzip_comp_level 6;
+    # gzip_buffers 16 8k;
+    # gzip_http_version 1.1;
+    # gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    ##
+    # Virtual Host Configs
+    ##
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}
+
+
+#mail {
+#   # See sample authentication script at:
+#   # http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+# 
+#   # auth_http localhost/auth.php;
+#   # pop3_capabilities "TOP" "USER";
+#   # imap_capabilities "IMAP4rev1" "UIDPLUS";
+# 
+#   server {
+#       listen     localhost:110;
+#       protocol   pop3;
+#       proxy      on;
+#   }
+# 
+#   server {
+#       listen     localhost:143;
+#       protocol   imap;
+#       proxy      on;
+#   }
+#}
+                    </code>
+                </pre>
+                <p>Проверка конфигурационного файла</p>
+                <code>
+                   sudo nginx -t
+                </code>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="host">
+
+            </div>
+            
+        </div>
+    </div>
+</div>
